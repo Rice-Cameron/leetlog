@@ -25,7 +25,7 @@ export default function ComplexityInput({
   onChange,
   placeholder,
 }: ComplexityInputProps) {
-  const handleChange = (option: any) => {
+  const handleChange = (option: ComplexityOption | null) => {
     if (option) {
       onChange(option.value);
     }

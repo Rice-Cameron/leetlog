@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Problem, Difficulty } from "@/types/problem";
+import { Problem } from "@/types/problem";
 
 export default function ProblemsPage() {
   const [problems, setProblems] = useState<Problem[]>([]);

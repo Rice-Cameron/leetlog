@@ -1,4 +1,3 @@
-import { Problem } from "@/types/problem";
 import { format } from "date-fns";
 import { notFound } from "next/navigation";
 import { getProblemById } from "../../../lib/problems";
@@ -6,9 +5,10 @@ import { getProblemById } from "../../../lib/problems";
 export default async function ProblemDetailsPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const { id } = await params;
+  const resolvedParams = await params;
+  const { id } = resolvedParams;
   const problem = await getProblemById(parseInt(id));
 
   if (!problem) {
@@ -125,7 +125,7 @@ export default async function ProblemDetailsPage({
                   Categories
                 </h2>
                 <div className="flex flex-wrap gap-2">
-                  {problem.categories.map((category: any) => (
+                  {problem.categories.map((category: { categoryId: number; category: { name: string } }) => (
                     <span
                       key={`${category.categoryId}-${category.category.name}`}
                       className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800"

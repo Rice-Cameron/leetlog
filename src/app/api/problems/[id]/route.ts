@@ -1,14 +1,15 @@
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import { prisma } from "../../../../../lib/prisma";
-import { CreateProblem, Difficulty } from "@/types/problem";
+import { CreateProblem } from "@/types/problem";
 
 export async function GET(
-  request: Request,
-  { params }: { params: { id: string } }
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const resolvedParams = await params;
   try {
     const problem = await prisma.problem.findUnique({
-      where: { id: parseInt(params.id) },
+      where: { id: parseInt(resolvedParams.id) },
       include: {
         categories: {
           select: {
@@ -37,13 +38,14 @@ export async function GET(
 }
 
 export async function PUT(
-  request: Request,
-  { params }: { params: { id: string } }
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const resolvedParams = await params;
   try {
     const data = (await request.json()) as CreateProblem;
     const problem = await prisma.problem.update({
-      where: { id: parseInt(params.id) },
+      where: { id: parseInt(resolvedParams.id) },
       data: {
         title: data.title,
         url: data.url,
@@ -79,12 +81,13 @@ export async function PUT(
 }
 
 export async function DELETE(
-  request: Request,
-  { params }: { params: { id: string } }
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const resolvedParams = await params;
   try {
     await prisma.problem.delete({
-      where: { id: parseInt(params.id) },
+      where: { id: parseInt(resolvedParams.id) },
     });
     return NextResponse.json({ message: "Problem deleted successfully" });
   } catch (error) {
