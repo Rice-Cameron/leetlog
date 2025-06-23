@@ -2,25 +2,61 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Problem, Difficulty } from "@/types/problem";
+import { useQuery } from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-export default function ProblemsPage() {
-  const [problems, setProblems] = useState<Problem[]>([]);
+// Create a client-side query client with more selective caching
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000, // 5 minutes
+      refetchOnWindowFocus: false,
+      refetchOnMount: false,
+    },
+  },
+});
+
+function ProblemsPage() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <ProblemsContent />
+    </QueryClientProvider>
+  );
+}
+
+function ProblemsContent() {
   const router = useRouter();
-
-  useEffect(() => {
-    fetchProblems();
-  }, []);
-
-  const fetchProblems = async () => {
-    try {
+  const { data: problems, isLoading, error } = useQuery<Problem[]>({
+    queryKey: ['problems'],
+    queryFn: async () => {
       const response = await fetch("/api/problems");
       if (!response.ok) throw new Error("Failed to fetch problems");
-      const data = await response.json();
-      setProblems(data);
-    } catch (error) {
-      console.error("Error fetching problems:", error);
-    }
-  };
+      return response.json();
+    },
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+  });
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-red-600">Error loading problems</div>
+      </div>
+    );
+  }
+
+  if (!problems) {
+    return null;
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -105,3 +141,5 @@ export default function ProblemsPage() {
     </div>
   );
 }
+
+export default ProblemsPage;

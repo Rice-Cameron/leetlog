@@ -5,10 +5,21 @@ import { CreateProblem, Difficulty } from "@/types/problem";
 export async function GET() {
   try {
     const problems = await prisma.problem.findMany({
-      include: {
+      select: {
+        id: true,
+        title: true,
+        difficulty: true,
+        languageUsed: true,
+        updatedAt: true,
+        wasHard: true,
+        dateSolved: true,
         categories: {
-          include: {
-            category: true,
+          select: {
+            category: {
+              select: {
+                name: true,
+              },
+            },
           },
         },
       },
@@ -16,7 +27,15 @@ export async function GET() {
         dateSolved: "desc",
       },
     });
-    return NextResponse.json(problems);
+
+    // Transform the data to match our Problem type
+    const formattedProblems = problems.map((problem) => ({
+      ...problem,
+      categories: problem.categories.map((cat) => cat.category.name),
+      updatedAt: problem.updatedAt.toISOString(),
+    }));
+
+    return NextResponse.json(formattedProblems);
   } catch (error) {
     console.error("Error fetching problems:", error);
     return NextResponse.json(
