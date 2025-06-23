@@ -45,8 +45,8 @@ export default async function ProblemDetailsPage({
                 </h2>
                 <div className="space-y-4">
                   <div key="url">
-                    <dt className="text-sm font-medium text-gray-500">URL</dt>
-                    <dd className="mt-1 text-sm text-gray-900">
+                    <dt className="text-base font-medium text-gray-500">URL</dt>
+                    <dd className="mt-1 text-base text-gray-900">
                       <a
                         href={problem.url}
                         target="_blank"
@@ -58,18 +58,18 @@ export default async function ProblemDetailsPage({
                     </dd>
                   </div>
                   <div key="language-used">
-                    <dt className="text-sm font-medium text-gray-500">
+                    <dt className="text-base font-medium text-gray-500">
                       Language Used
                     </dt>
-                    <dd className="mt-1 text-sm text-gray-900">
+                    <dd className="mt-1 text-base text-gray-900">
                       {problem.languageUsed}
                     </dd>
                   </div>
                   <div key="date-solved">
-                    <dt className="text-sm font-medium text-gray-500">
+                    <dt className="text-base font-medium text-gray-500">
                       Date Solved
                     </dt>
-                    <dd className="mt-1 text-sm text-gray-900">
+                    <dd className="mt-1 text-base text-gray-900">
                       {format(new Date(problem.dateSolved), "MMMM d, yyyy")}
                     </dd>
                   </div>
@@ -82,18 +82,18 @@ export default async function ProblemDetailsPage({
                 </h2>
                 <div className="space-y-4">
                   <div key="time-complexity">
-                    <dt className="text-sm font-medium text-gray-500">
+                    <dt className="text-base font-medium text-gray-500">
                       Time Complexity
                     </dt>
-                    <dd className="mt-1 text-sm text-gray-900">
+                    <dd className="mt-1 text-base text-gray-900">
                       {problem.timeComplexity}
                     </dd>
                   </div>
                   <div key="space-complexity">
-                    <dt className="text-sm font-medium text-gray-500">
+                    <dt className="text-base font-medium text-gray-500">
                       Space Complexity
                     </dt>
-                    <dd className="mt-1 text-sm text-gray-900">
+                    <dd className="mt-1 text-base text-gray-900">
                       {problem.spaceComplexity}
                     </dd>
                   </div>
@@ -127,10 +127,10 @@ export default async function ProblemDetailsPage({
                 <div className="flex flex-wrap gap-2">
                   {problem.categories.map((category: any) => (
                     <span
-                      key={`${category.id}-${category.name}`}
-                      className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800"
+                      key={`${category.categoryId}-${category.category.name}`}
+                      className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800"
                     >
-                      {category.name}
+                      {category.category.name}
                     </span>
                   ))}
                 </div>
