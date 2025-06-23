@@ -2,41 +2,32 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Problem, Difficulty } from "@/types/problem";
-import { useQuery } from "@tanstack/react-query";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-// Create a client-side query client with more selective caching
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 5 * 60 * 1000, // 5 minutes
-      refetchOnWindowFocus: false,
-      refetchOnMount: false,
-    },
-  },
-});
-
-function ProblemsPage() {
-  return (
-    <QueryClientProvider client={queryClient}>
-      <ProblemsContent />
-    </QueryClientProvider>
-  );
-}
-
-function ProblemsContent() {
+export default function ProblemsPage() {
+  const [problems, setProblems] = useState<Problem[]>([]);
   const router = useRouter();
-  const { data: problems, isLoading, error } = useQuery<Problem[]>({
-    queryKey: ['problems'],
-    queryFn: async () => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetchProblems();
+  }, []);
+
+  const fetchProblems = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
       const response = await fetch("/api/problems");
       if (!response.ok) throw new Error("Failed to fetch problems");
-      return response.json();
-    },
-    staleTime: 5 * 60 * 1000, // 5 minutes
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
-  });
+      const data = await response.json();
+      setProblems(data);
+    } catch (error) {
+      console.error("Error fetching problems:", error);
+      setError("Failed to fetch problems");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -49,7 +40,7 @@ function ProblemsContent() {
   if (error) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-red-600">Error loading problems</div>
+        <div className="text-red-600">{error}</div>
       </div>
     );
   }
@@ -141,5 +132,3 @@ function ProblemsContent() {
     </div>
   );
 }
-
-export default ProblemsPage;
