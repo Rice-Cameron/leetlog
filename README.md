@@ -23,23 +23,22 @@ A modern web application for tracking and organizing your LeetCode problem solvi
 ## Getting Started
 
 1. Clone the repository:
+
    ```bash
-   git clone https://github.com/Rice-Cameron/LeetLog.git
-   cd LeetLog
+   git clone https://github.com/Rice-Cameron/leetlog.git
+   cd leetlog
    ```
 
 2. Install dependencies:
+
    ```bash
    npm install
-   # or
-   yarn install
    ```
 
 3. Run the development server:
+
    ```bash
    npm run dev
-   # or
-   yarn dev
    ```
 
 4. Open [http://localhost:3000](http://localhost:3000) with your browser to see the application.
@@ -57,6 +56,28 @@ The project uses Turbopack for faster development builds. You can run the develo
 
 ```bash
 npm run dev --turbopack
+```
+
+## Building
+
+To build the project for production, run:
+
+```bash
+npm run build
+```
+
+## Prisma
+
+To run the Prisma Studio, run:
+
+```bash
+npm run studio
+```
+
+To generate Prisma Client, run:
+
+```bash
+npm run generate
 ```
 
 ## Contributing
@@ -86,4 +107,4 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Check out the [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
