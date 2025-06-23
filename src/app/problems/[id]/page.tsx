@@ -1,13 +1,14 @@
 import { Problem } from "@/types/problem";
 import { format } from "date-fns";
 import { notFound } from "next/navigation";
-import { getProblemById } from "@/lib/problems";
+import { getProblemById } from "../../../lib/problems";
 
 export default async function ProblemDetailsPage({
-  params: { id },
+  params,
 }: {
   params: { id: string };
 }) {
+  const { id } = await params;
   const problem = await getProblemById(parseInt(id));
 
   if (!problem) {
@@ -23,6 +24,7 @@ export default async function ProblemDetailsPage({
               {problem.title}
             </h1>
             <span
+              key={problem.id}
               className={`px-3 py-1 rounded-full text-sm font-medium ${
                 problem.difficulty === "EASY"
                   ? "bg-green-100 text-green-800"
@@ -42,7 +44,7 @@ export default async function ProblemDetailsPage({
                   Problem Details
                 </h2>
                 <div className="space-y-4">
-                  <div>
+                  <div key="url">
                     <dt className="text-sm font-medium text-gray-500">URL</dt>
                     <dd className="mt-1 text-sm text-gray-900">
                       <a
@@ -55,7 +57,7 @@ export default async function ProblemDetailsPage({
                       </a>
                     </dd>
                   </div>
-                  <div>
+                  <div key="language-used">
                     <dt className="text-sm font-medium text-gray-500">
                       Language Used
                     </dt>
@@ -63,7 +65,7 @@ export default async function ProblemDetailsPage({
                       {problem.languageUsed}
                     </dd>
                   </div>
-                  <div>
+                  <div key="date-solved">
                     <dt className="text-sm font-medium text-gray-500">
                       Date Solved
                     </dt>
@@ -79,7 +81,7 @@ export default async function ProblemDetailsPage({
                   Complexity Analysis
                 </h2>
                 <div className="space-y-4">
-                  <div>
+                  <div key="time-complexity">
                     <dt className="text-sm font-medium text-gray-500">
                       Time Complexity
                     </dt>
@@ -87,7 +89,7 @@ export default async function ProblemDetailsPage({
                       {problem.timeComplexity}
                     </dd>
                   </div>
-                  <div>
+                  <div key="space-complexity">
                     <dt className="text-sm font-medium text-gray-500">
                       Space Complexity
                     </dt>
@@ -125,7 +127,7 @@ export default async function ProblemDetailsPage({
                 <div className="flex flex-wrap gap-2">
                   {problem.categories.map((category: any) => (
                     <span
-                      key={category.id}
+                      key={`${category.id}-${category.name}`}
                       className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800"
                     >
                       {category.name}

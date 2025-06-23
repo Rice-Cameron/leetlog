@@ -62,7 +62,7 @@ export default function ProblemsPage() {
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-medium text-gray-900">
                       <a
-                        href={`/problem/${problem.id}`}
+                        href={`/problems/${problem.id}`}
                         className="hover:text-indigo-600"
                       >
                         {problem.title}
@@ -70,18 +70,21 @@ export default function ProblemsPage() {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                      problem.difficulty === "EASY"
-                        ? "bg-green-100 text-green-800"
-                        : problem.difficulty === "MEDIUM"
-                        ? "bg-yellow-100 text-yellow-800"
-                        : "bg-red-100 text-red-800"
-                    }`}>
+                    <span
+                      key={`difficulty-${problem.id}`}
+                      className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                        problem.difficulty === "EASY"
+                          ? "bg-green-100 text-green-800"
+                          : problem.difficulty === "MEDIUM"
+                          ? "bg-yellow-100 text-yellow-800"
+                          : "bg-red-100 text-red-800"
+                      }`}
+                    >
                       {problem.difficulty}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className="text-sm text-gray-500">{problem.languageUsed}</span>
+                    <span key={`language-${problem.id}`} className="text-sm text-gray-500">{problem.languageUsed}</span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {new Date(problem.updatedAt).toLocaleDateString()}
