@@ -98,12 +98,23 @@ export default function NewProblem() {
                   Difficulty
                 </label>
                 <Select
-                  value={difficulty ? { value: difficulty, label: difficulty.charAt(0) + difficulty.slice(1).toLowerCase() } : null}
-                  onChange={(option) => setDifficulty(option?.value as Difficulty)}
+                  value={
+                    difficulty
+                      ? {
+                          value: difficulty,
+                          label:
+                            difficulty.charAt(0) +
+                            difficulty.slice(1).toLowerCase(),
+                        }
+                      : null
+                  }
+                  onChange={(option) =>
+                    setDifficulty(option?.value as Difficulty)
+                  }
                   options={[
                     { value: "EASY", label: "Easy" },
                     { value: "MEDIUM", label: "Medium" },
-                    { value: "HARD", label: "Hard" }
+                    { value: "HARD", label: "Hard" },
                   ]}
                   placeholder="Select difficulty"
                   className="mt-1 block w-full"
@@ -113,27 +124,30 @@ export default function NewProblem() {
                       border: "1px solid #e5e7eb",
                       borderRadius: "0.5rem",
                       boxShadow: "none",
-                      '&:hover': {
-                        borderColor: '#9ca3af'
-                      }
+                      "&:hover": {
+                        borderColor: "#9ca3af",
+                      },
                     }),
                     menu: (provided) => ({
                       ...provided,
                       borderRadius: "0.5rem",
-                      boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)"
+                      boxShadow:
+                        "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
                     }),
                     option: (provided, state) => ({
                       ...provided,
-                      backgroundColor: state.isSelected ? '#3b82f6' : 'white',
-                      color: state.isSelected ? 'white' : 'black',
-                      '&:hover': {
-                        backgroundColor: state.isSelected ? '#3b82f6' : '#e5e7eb'
-                      }
+                      backgroundColor: state.isSelected ? "#3b82f6" : "white",
+                      color: state.isSelected ? "white" : "black",
+                      "&:hover": {
+                        backgroundColor: state.isSelected
+                          ? "#3b82f6"
+                          : "#e5e7eb",
+                      },
                     }),
                     singleValue: (provided) => ({
                       ...provided,
-                      color: difficulty ? 'black' : 'rgba(0, 0, 0, 0.7)'
-                    })
+                      color: difficulty ? "black" : "rgba(0, 0, 0, 0.7)",
+                    }),
                   }}
                   isSearchable={false}
                 />
