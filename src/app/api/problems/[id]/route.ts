@@ -23,10 +23,7 @@ export async function GET(
     });
 
     if (!problem) {
-      return NextResponse.json(
-        { error: "Problem not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Problem not found" }, { status: 404 });
     }
 
     return NextResponse.json(problem);

@@ -8,13 +8,13 @@ export async function GET() {
       include: {
         categories: {
           include: {
-            category: true
-          }
-        }
+            category: true,
+          },
+        },
       },
       orderBy: {
-        dateSolved: "desc"
-      }
+        dateSolved: "desc",
+      },
     });
     return NextResponse.json(problems);
   } catch (error) {
@@ -28,7 +28,7 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const data = await request.json() as CreateProblem;
+    const data = (await request.json()) as CreateProblem;
     const problem = await prisma.problem.create({
       data: {
         title: data.title,
@@ -42,16 +42,16 @@ export async function POST(request: Request) {
         spaceComplexity: data.spaceComplexity,
         wasHard: data.wasHard,
         categories: {
-          create: data.categories.map(category => ({
+          create: data.categories.map((category) => ({
             category: {
               connectOrCreate: {
                 where: { name: category },
-                create: { name: category }
-              }
-            }
-          }))
-        }
-      }
+                create: { name: category },
+              },
+            },
+          })),
+        },
+      },
     });
     return NextResponse.json(problem);
   } catch (error) {
