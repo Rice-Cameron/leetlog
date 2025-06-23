@@ -1,22 +1,75 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# LeetLog
+
+A modern web application for tracking and organizing your LeetCode problem solving journey. LeetLog helps you keep track of the problems you've solved, your solutions, and important metadata like time and space complexity.
+
+## Features
+
+- Track LeetCode problems with title, URL, and difficulty
+- Document solution approaches and challenges
+- Record time and space complexity
+- Track problem categories and trigger keywords
+- Modern, responsive UI with dark mode support
+- Built with TypeScript for type safety
+
+## Tech Stack
+
+- Next.js 15.3.4
+- React 19
+- TypeScript 5
+- Tailwind CSS 4
+- Prisma ORM 6.10.1
+- SQLite Database
 
 ## Getting Started
 
-First, run the development server:
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/Rice-Cameron/LeetLog.git
+   cd LeetLog
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
+
+3. Run the development server:
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   ```
+
+4. Open [http://localhost:3000](http://localhost:3000) with your browser to see the application.
+
+## Project Structure
+
+- `/app` - Next.js App Router pages and components
+- `/prisma` - Database schema and migrations
+- `/src/types` - TypeScript type definitions
+- `/public` - Static assets
+
+## Development
+
+The project uses Turbopack for faster development builds. You can run the development server with:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run dev --turbopack
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Contributing
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
