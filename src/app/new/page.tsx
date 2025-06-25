@@ -20,7 +20,7 @@ export default function NewProblem() {
   const [timeComplexity, setTimeComplexity] = useState("");
   const [spaceComplexity, setSpaceComplexity] = useState("");
   const [wasHard, setWasHard] = useState(false);
-  const [categories, setCategories] = useState<string[]>([]);
+  const [categoriesInput, setCategoriesInput] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,7 +42,10 @@ export default function NewProblem() {
           timeComplexity,
           spaceComplexity,
           wasHard,
-          categories,
+          categories: categoriesInput
+            .split(",")
+            .map((s) => s.trim())
+            .filter(Boolean),
         }),
       });
 
@@ -290,15 +293,8 @@ export default function NewProblem() {
                 </label>
                 <input
                   type="text"
-                  value={categories.join(", ")}
-                  onChange={(e) =>
-                    setCategories(
-                      e.target.value
-                        .split(",")
-                        .map((s) => s.trim())
-                        .filter(Boolean)
-                    )
-                  }
+                  value={categoriesInput}
+                  onChange={(e) => setCategoriesInput(e.target.value)}
                   className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-purple-400 focus:ring-4 focus:ring-purple-100 transition-all text-gray-800 placeholder-gray-400 font-medium"
                   placeholder="e.g., Array, Dynamic Programming, Graph"
                 />

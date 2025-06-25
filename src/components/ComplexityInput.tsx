@@ -39,6 +39,7 @@ export default function ComplexityInput({
         options={complexityOptions}
         placeholder={placeholder}
         className="w-full"
+        menuPortalTarget={typeof window !== "undefined" ? document.body : null}
         styles={{
           control: (provided) => ({
             ...provided,
@@ -51,6 +52,14 @@ export default function ComplexityInput({
           menu: (provided) => ({
             ...provided,
             backgroundColor: "#ffffff",
+            maxHeight: "160px",
+            overflowY: "auto",
+            zIndex: 9999,
+            position: "absolute",
+          }),
+          menuPortal: (base) => ({
+            ...base,
+            zIndex: 9999,
           }),
           option: (provided, state) => ({
             ...provided,
