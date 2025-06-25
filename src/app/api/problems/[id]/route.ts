@@ -9,16 +9,16 @@ export async function GET(
 ) {
   const resolvedParams = await params;
   try {
-    const { userId } = auth();
-    
+    const { userId } = await auth();
+
     if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-    
+
     const problem = await prisma.problem.findFirst({
-      where: { 
+      where: {
         id: parseInt(resolvedParams.id),
-        userId: userId 
+        userId: userId,
       },
       include: {
         categories: {
@@ -53,24 +53,24 @@ export async function PUT(
 ) {
   const resolvedParams = await params;
   try {
-    const { userId } = auth();
-    
+    const { userId } = await auth();
+
     if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-    
+
     // First check if the problem exists and belongs to the user
     const existingProblem = await prisma.problem.findFirst({
       where: {
         id: parseInt(resolvedParams.id),
-        userId: userId
-      }
+        userId: userId,
+      },
     });
-    
+
     if (!existingProblem) {
       return NextResponse.json({ error: "Problem not found" }, { status: 404 });
     }
-    
+
     const data = (await request.json()) as CreateProblem;
     const problem = await prisma.problem.update({
       where: { id: parseInt(resolvedParams.id) },
@@ -114,24 +114,24 @@ export async function DELETE(
 ) {
   const resolvedParams = await params;
   try {
-    const { userId } = auth();
-    
+    const { userId } = await auth();
+
     if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-    
+
     // First check if the problem exists and belongs to the user
     const existingProblem = await prisma.problem.findFirst({
       where: {
         id: parseInt(resolvedParams.id),
-        userId: userId
-      }
+        userId: userId,
+      },
     });
-    
+
     if (!existingProblem) {
       return NextResponse.json({ error: "Problem not found" }, { status: 404 });
     }
-    
+
     await prisma.problem.delete({
       where: { id: parseInt(resolvedParams.id) },
     });
