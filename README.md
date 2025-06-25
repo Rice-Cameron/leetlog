@@ -1,5 +1,7 @@
 # LeetLog
 
+**Live Demo:** [https://leetlog-livid.vercel.app/](https://leetlog-livid.vercel.app/)
+
 A modern web application for tracking and organizing your LeetCode problem solving journey. LeetLog helps you keep track of the problems you've solved, your solutions, and important metadata like time and space complexity.
 
 ## Features
