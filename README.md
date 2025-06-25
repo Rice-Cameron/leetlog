@@ -10,7 +10,7 @@ A modern web application for tracking and organizing your LeetCode problem solvi
 - Document solution approaches and challenges
 - Record time and space complexity
 - Track problem categories and trigger keywords
-- Modern, responsive UI with dark mode support
+- Modern, responsive UI
 - Built with TypeScript for type safety
 
 ## Tech Stack
@@ -122,6 +122,16 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out the [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## TODO
+
+- [ ] Add more analytics and visualizations
+- [ ] Implement more user settings
+- [ ] Add support for importing/exporting problems
+- [ ] Improve mobile responsiveness
+- [ ] Write tests
+- [ ] Implement dark mode
+- [ ] AI Integration to analyze weeks work of Leetcode problems
 
 ## Database Recommendation
 
