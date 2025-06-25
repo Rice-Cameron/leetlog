@@ -2,6 +2,15 @@ import { format } from "date-fns";
 import { notFound } from "next/navigation";
 import { getProblemById } from "../../../lib/problems";
 
+// Map complexity values to labels for display
+const complexityLabelMap: Record<string, string> = {
+  "O(1)": "O(1)",
+  "O(log n)": "O(log n)",
+  "O(n)": "O(n)",
+  "O(n log n)": "O(n log n)",
+  "O(n^2)": "O(n²)",
+};
+
 export default async function ProblemDetailsPage({
   params,
 }: {
@@ -96,7 +105,8 @@ export default async function ProblemDetailsPage({
                       Time Complexity
                     </dt>
                     <dd className="mt-1 text-base text-gray-900">
-                      {problem.timeComplexity}
+                      {complexityLabelMap[problem.timeComplexity] ||
+                        problem.timeComplexity}
                     </dd>
                   </div>
                   <div key="space-complexity">
@@ -104,7 +114,8 @@ export default async function ProblemDetailsPage({
                       Space Complexity
                     </dt>
                     <dd className="mt-1 text-base text-gray-900">
-                      {problem.spaceComplexity}
+                      {complexityLabelMap[problem.spaceComplexity] ||
+                        problem.spaceComplexity}
                     </dd>
                   </div>
                 </div>

@@ -56,6 +56,13 @@ export default function ComplexityInput({
             overflowY: "auto",
             zIndex: 9999,
             position: "absolute",
+            width: "100%",
+            minWidth: "100%",
+            borderRadius: "0.5rem",
+            WebkitBorderRadius: "0.5rem",
+            MozBorderRadius: "0.5rem",
+            boxShadow: "0 4px 24px rgba(0,0,0,0.08)",
+            left: 0,
           }),
           menuPortal: (base) => ({
             ...base,
@@ -83,6 +90,7 @@ export default function ComplexityInput({
             fontSize: "0.875rem",
           }),
         }}
+        menuPlacement="auto"
       />
     </div>
   );
