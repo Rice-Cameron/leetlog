@@ -132,6 +132,7 @@ Check out the [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 - [ ] Write tests
 - [ ] Implement dark mode
 - [ ] AI Integration to analyze weeks work of Leetcode problems
+- [ ] Add Leetcode tips sections
 
 ## Database Recommendation
 
