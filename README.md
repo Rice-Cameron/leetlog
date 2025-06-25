@@ -24,6 +24,16 @@ A modern web application for tracking and organizing your LeetCode problem solvi
 
 ## Getting Started
 
+**Environment Variables:**
+
+Before running the app, copy the example environment file:
+
+```bash
+cp .env.copy .env
+```
+
+Then, edit `.env` to add your own secrets and configuration values.
+
 1. Clone the repository:
 
    ```bash
