@@ -147,31 +147,21 @@ export default function ProblemsPage() {
 
         {/* Problems grid/table */}
         {problems.length === 0 ? (
-          <div className="glass-card rounded-2xl p-12 text-center animate-scale-in">
-            <div className="w-20 h-20 bg-gradient-to-r from-gray-300 to-gray-400 rounded-full flex items-center justify-center mb-6 mx-auto">
-              <svg
-                className="w-10 h-10 text-white"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+          <div className="animate-fade-in">
+            <div className="bg-white rounded-lg shadow p-8 text-center">
+              <h3 className="text-2xl font-semibold text-gradient mb-2">
+                You have not logged any problems yet.
+              </h3>
+              <p className="text-gray-600 mb-6">
+                Start by adding your first LeetCode problem.
+              </p>
+              <button
+                onClick={() => router.push("/new")}
+                className="btn-primary"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                />
-              </svg>
+                Add Your First Problem
+              </button>
             </div>
-            <h3 className="text-2xl font-semibold text-gradient mb-4">
-              No problems yet
-            </h3>
-            <p className="text-gray-600 mb-8 max-w-md mx-auto">
-              Start your coding journey by adding your first LeetCode problem!
-            </p>
-            <button onClick={() => router.push("/new")} className="btn-primary">
-              Add Your First Problem
-            </button>
           </div>
         ) : (
           <div className="space-y-4 animate-fade-in">

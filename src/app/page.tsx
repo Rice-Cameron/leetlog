@@ -61,7 +61,11 @@ export default function Page() {
                     />
                   </>
                 ) : (
-                  <SignInButton mode="modal">
+                  <SignInButton
+                    mode="modal"
+                    forceRedirectUrl="/problems"
+                    signUpForceRedirectUrl="/problems"
+                  >
                     <button className="btn-primary">Sign In</button>
                   </SignInButton>
                 )}
@@ -218,7 +222,11 @@ export default function Page() {
                   Ready to level up your coding skills?
                 </p>
                 <div className="flex flex-col sm:flex-row justify-center gap-4">
-                  <SignInButton mode="redirect">
+                  <SignInButton
+                    mode="redirect"
+                    forceRedirectUrl="/problems"
+                    signUpForceRedirectUrl="/problems"
+                  >
                     <button className="btn-primary text-lg px-10 py-4 group">
                       <span className="flex items-center gap-2">
                         Get Started

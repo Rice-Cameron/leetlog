@@ -5,12 +5,12 @@ import { auth } from "@clerk/nextjs/server";
 
 export async function GET() {
   try {
-    const { userId } = auth();
-    
+    const { userId } = await auth();
+
     if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-    
+
     const problems = await prisma.problem.findMany({
       where: {
         userId: userId,
@@ -57,12 +57,12 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const { userId } = auth();
-    
+    const { userId } = await auth();
+
     if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-    
+
     const data = (await request.json()) as CreateProblem;
     const problem = await prisma.problem.create({
       data: {
