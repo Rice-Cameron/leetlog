@@ -1,10 +1,20 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { CreateProblem } from "@/types/problem";
+import { auth } from "@clerk/nextjs/server";
 
 export async function GET() {
   try {
+    const { userId } = auth();
+    
+    if (!userId) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    
     const problems = await prisma.problem.findMany({
+      where: {
+        userId: userId,
+      },
       select: {
         id: true,
         title: true,
@@ -47,6 +57,12 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
+    const { userId } = auth();
+    
+    if (!userId) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    
     const data = (await request.json()) as CreateProblem;
     const problem = await prisma.problem.create({
       data: {
@@ -60,6 +76,7 @@ export async function POST(request: Request) {
         timeComplexity: data.timeComplexity,
         spaceComplexity: data.spaceComplexity,
         wasHard: data.wasHard,
+        userId: userId,
         categories: {
           create: data.categories.map((category) => ({
             category: {

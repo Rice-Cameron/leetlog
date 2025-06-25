@@ -3,11 +3,13 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Difficulty } from "@prisma/client";
 import Select from "react-select";
+import { useUser, UserButton, SignInButton } from '@clerk/nextjs';
 
 import ComplexityInput from "@/components/ComplexityInput";
 
 export default function NewProblem() {
   const router = useRouter();
+  const { isSignedIn, isLoaded } = useUser();
   const [title, setTitle] = useState("");
   const [url, setUrl] = useState("");
   const [difficulty, setDifficulty] = useState<Difficulty | "">("");
@@ -54,8 +56,44 @@ export default function NewProblem() {
     }
   };
 
+  // Show loading while Clerk is loading
+  if (!isLoaded) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+      </div>
+    );
+  }
+
+  // Redirect to sign in if not authenticated
+  if (!isSignedIn) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="max-w-md w-full bg-white rounded-lg shadow-md p-6 text-center">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Sign In Required</h2>
+          <p className="text-gray-600 mb-6">Please sign in to add new problems.</p>
+          <SignInButton mode="redirect">
+            <button className="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition-colors">
+              Sign In
+            </button>
+          </SignInButton>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <header className="bg-white shadow">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex justify-between items-center">
+            <h2 className="text-2xl font-bold text-gray-900">LeetLog</h2>
+            <UserButton afterSignOutUrl="/" />
+          </div>
+        </div>
+      </header>
+      
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="bg-white rounded-lg shadow-xl overflow-hidden">
           <div className="px-6 py-8">

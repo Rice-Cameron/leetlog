@@ -13,6 +13,16 @@ enum Difficulty {
   HARD
 }
 
+model User {
+  id          String    @id
+  email       String    @unique
+  firstName   String?
+  lastName    String?
+  problems    Problem[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
 model Problem {
   id              Int         @id @default(autoincrement())
   title           String
@@ -26,6 +36,8 @@ model Problem {
   timeComplexity  String
   spaceComplexity String
   wasHard         Boolean
+  userId          String
+  user            User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   categories      ProblemCategory[]
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
