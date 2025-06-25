@@ -20,17 +20,11 @@ A modern web application for tracking and organizing your LeetCode problem solvi
 - TypeScript 5
 - Tailwind CSS 4
 - Prisma ORM 6.10.1
-- SQLite Database
+- Neon (PostgreSQL)
+
+_Note: Initially, SQLite was used for local development, but was later replaced with Neon (PostgreSQL) once deployed._
 
 ## Getting Started
-
-**Environment Variables:**
-
-Before running the app, copy the example environment file:
-
-```bash
-cp .env.copy .env
-```
 
 Then, edit `.env` to add your own secrets and configuration values.
 
@@ -45,6 +39,14 @@ Then, edit `.env` to add your own secrets and configuration values.
 
    ```bash
    npm install
+   ```
+
+   **Environment Variables:**
+
+   Before running the app, copy the example environment file:
+
+   ```bash
+   cp .env.copy .env
    ```
 
 3. Run the development server:
@@ -120,3 +122,7 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out the [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Database Recommendation
+
+This project uses [Neon](https://neon.tech/) with PostgreSQL for both local development and production. Neon offers a free, serverless, and cloud-native PostgreSQL database that works perfectly with Vercel and Prisma.
