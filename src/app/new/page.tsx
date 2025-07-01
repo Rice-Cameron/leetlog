@@ -3,9 +3,10 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Difficulty } from "@prisma/client";
 import Select from "react-select";
-import { useUser, UserButton, SignInButton } from "@clerk/nextjs";
+import { useUser, SignInButton } from "@clerk/nextjs";
 
 import ComplexityInput from "@/components/ComplexityInput";
+import Header from "@/components/Header";
 
 export default function NewProblem() {
   const router = useRouter();
@@ -101,31 +102,7 @@ export default function NewProblem() {
       </div>
 
       {/* Header with glass morphism */}
-      <header className="relative z-10 animate-fade-in">
-        <div className="glass-card rounded-none border-0">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-            <div className="flex justify-between items-center">
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl flex items-center justify-center animate-glow">
-                  <span className="text-white font-bold text-lg">L</span>
-                </div>
-                <h2 className="text-3xl font-bold text-gradient tracking-tight">
-                  LeetLog
-                </h2>
-              </div>
-              <UserButton
-                afterSignOutUrl="/"
-                appearance={{
-                  elements: {
-                    avatarBox:
-                      "w-10 h-10 rounded-xl shadow-lg hover:shadow-xl transition-shadow",
-                  },
-                }}
-              />
-            </div>
-          </div>
-        </div>
-      </header>
+      <Header />
 
       <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Page header */}
