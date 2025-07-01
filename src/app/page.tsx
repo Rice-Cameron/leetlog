@@ -6,7 +6,7 @@ import Header from "@/components/Header";
 
 export default function Page() {
   const router = useRouter();
-  const { isSignedIn, user } = useUser();
+  const { isSignedIn } = useUser();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
