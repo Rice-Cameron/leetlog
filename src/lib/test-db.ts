@@ -1,40 +1,28 @@
 import { PrismaClient } from '@prisma/client'
 
-// Test database instance
-export const testDb = new PrismaClient({
-  datasources: {
-    db: {
-      url: process.env.DATABASE_URL_TEST || process.env.DATABASE_URL,
-    },
-  },
-})
+// Test database instance - create fresh client for tests
+export const testDb = new PrismaClient()
 
 // Clean up all tables for a fresh test state
 export async function cleanupTestDb() {
-  const tablenames = await testDb.$queryRaw<Array<{ tablename: string }>>`
-    SELECT tablename FROM pg_tables WHERE schemaname='public'
-  `
-
-  const tables = tablenames
-    .map(({ tablename }) => tablename)
-    .filter((name) => name !== '_prisma_migrations')
-    .map((name) => `"public"."${name}"`)
-    .join(', ')
-
   try {
-    if (tables.length > 0) {
-      await testDb.$executeRawUnsafe(`TRUNCATE TABLE ${tables} RESTART IDENTITY CASCADE`)
-    }
+    // Delete in order to respect foreign key constraints
+    await testDb.problemCategory.deleteMany()
+    await testDb.problem.deleteMany()
+    await testDb.category.deleteMany()
+    await testDb.user.deleteMany()
   } catch (error) {
-    console.log({ error })
+    console.log('Cleanup error:', error)
   }
 }
 
 // Seed test data
 export async function seedTestData() {
   // Create test user
-  const testUser = await testDb.user.create({
-    data: {
+  const testUser = await testDb.user.upsert({
+    where: { id: 'test-user-id' },
+    update: {},
+    create: {
       id: 'test-user-id',
       email: 'test@example.com',
       firstName: 'Test',
@@ -43,12 +31,16 @@ export async function seedTestData() {
   })
 
   // Create test categories
-  const arrayCategory = await testDb.category.create({
-    data: { name: 'Array' },
+  const arrayCategory = await testDb.category.upsert({
+    where: { name: 'Array' },
+    update: {},
+    create: { name: 'Array' },
   })
 
-  const hashCategory = await testDb.category.create({
-    data: { name: 'Hash Table' },
+  const hashCategory = await testDb.category.upsert({
+    where: { name: 'Hash Table' },
+    update: {},
+    create: { name: 'Hash Table' },
   })
 
   // Create test problem
@@ -60,7 +52,7 @@ export async function seedTestData() {
       languageUsed: 'JavaScript',
       solutionNotes: 'Use hash map for O(n) solution',
       whatWentWrong: 'Initially tried brute force',
-      triggerKeywords: 'sum, hashmap',
+      triggerKeywords: ['sum', 'hashmap'],
       timeComplexity: 'O(n)',
       spaceComplexity: 'O(n)',
       wasHard: false,
