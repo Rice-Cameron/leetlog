@@ -1,49 +1,10 @@
 import { PrismaClient } from '@prisma/client'
 import * as readline from 'readline'
+import { getDatabaseConfig, validateDatabaseConfig, getDatabaseUrl } from '../src/lib/db-config'
 
-// Database environment detection
+// Database environment detection (now uses centralized config)
 export function getDatabaseEnvironment(): 'production' | 'test' | 'development' {
-  const dbUrl = process.env.DATABASE_URL || ''
-  const nodeEnv = process.env.NODE_ENV || ''
-  
-  console.log(`🔍 Environment Detection:`)
-  console.log(`   NODE_ENV: ${nodeEnv}`)
-  console.log(`   DATABASE_URL: ${dbUrl ? dbUrl.substring(0, 60) + '...' : 'NOT SET'}`)
-  console.log(`   DATABASE_URL_TEST: ${process.env.DATABASE_URL_TEST ? 'SET' : 'NOT SET'}`)
-  
-  // Strong test environment indicators (highest priority)
-  if (nodeEnv === 'test' || 
-      process.env.DATABASE_URL_TEST || 
-      dbUrl.includes('-test') ||
-      dbUrl.includes('test-') ||
-      dbUrl.includes('test.') ||
-      dbUrl.includes('/test')) {
-    console.log(`   ✅ Detected: TEST environment`)
-    return 'test'
-  }
-  
-  // Production environment indicators
-  const productionIndicators = [
-    dbUrl.includes('neon.tech'),
-    dbUrl.includes('amazonaws.com'),
-    dbUrl.includes('planetscale.com'),
-    dbUrl.includes('railway.app'),
-    nodeEnv === 'production',
-    // Add more cloud providers as needed
-  ]
-  
-  const isProduction = productionIndicators.some(indicator => indicator)
-  
-  if (isProduction) {
-    console.log(`   ⚠️  Detected: PRODUCTION environment`)
-    console.log(`   🔍 Production indicators found:`)
-    if (dbUrl.includes('neon.tech')) console.log(`      - Neon database detected`)
-    if (nodeEnv === 'production') console.log(`      - NODE_ENV=production`)
-    return 'production'
-  }
-  
-  console.log(`   ℹ️  Detected: DEVELOPMENT environment (default)`)
-  return 'development'
+  return getDatabaseConfig().mode
 }
 
 // Safety confirmation for destructive operations

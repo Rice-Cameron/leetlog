@@ -17,22 +17,65 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `npx prisma db push` - Push schema changes to database
 - `npx prisma migrate dev` - Create and apply new migration
 
-## Database Scripts
+## Database Mode System
 
-⚠️  **IMPORTANT**: All database scripts now include environment detection and safety prompts
+LeetLog uses a sophisticated `DATABASE_MODE` system for safe database environment management:
 
-- `npm run seed` - Populate database with sample data (requires confirmation for production)
-- `npm run safe-seed` - Alternative seeding script with safety checks
-- `npm run safe-reset` - Reset database tables (BLOCKED for production, requires confirmation for development)
-- `npm run quick-data` - Add a few sample problems (requires existing user)
+### Environment Configuration
 
-### Database Safety Features
+```bash
+# In .env file:
+DATABASE_MODE=1  # 1=development, 2=production, 3=test
 
-- **Environment Detection**: Automatically detects production/test/development environments
-- **Production Protection**: Blocks destructive operations on production databases
-- **Confirmation Prompts**: Requires explicit "CONFIRM DELETE" for dangerous operations
-- **Backup Warnings**: Shows data counts before destructive operations
-- **URL Validation**: Checks database URL patterns to identify environments
+# Each mode uses different environment variables:
+DATABASE_URL_DEV   # Development database (Neon development branch)
+DATABASE_URL_PROD  # Production database (Neon main branch)
+DATABASE_URL_TEST  # Test database (Neon isolated test branch)
+```
+
+### Mode Selection Logic
+
+1. **NODE_ENV=test override**: Always forces test database regardless of DATABASE_MODE
+2. **Command-line override**: `DATABASE_MODE=X npm run command`
+3. **Default fallback**: Uses .env DATABASE_MODE value (defaults to 1)
+
+### Database Scripts
+
+⚠️  **IMPORTANT**: All database scripts include environment detection and safety prompts
+
+```bash
+# Safe seeding
+npm run seed          # Populate database (requires confirmation for production)
+npm run safe-seed     # Alternative seeding script  
+npm run quick-data    # Add sample problems (requires existing user)
+
+# Database operations
+npm run safe-reset    # Reset tables (BLOCKED for production)
+npm run test-db-mode  # Test DATABASE_MODE configuration
+
+# Test commands (automatically use DATABASE_MODE=3)
+npm run test          # Run tests with isolated test database
+npm run test:db       # Push schema to test database
+npm run test:db:reset # Reset test database schema
+```
+
+### Safety Architecture
+
+**Triple-Layer Protection:**
+1. **DATABASE_MODE validation**: Explicit mode selection with URL validation
+2. **NODE_ENV override**: `NODE_ENV=test` always forces test database
+3. **Runtime safety checks**: Prevents test mode from using production URLs
+
+**Database Branch Mapping:**
+- **Development**: `ep-sparkling-frog` (DATABASE_MODE=1)
+- **Production**: `ep-dark-surf` (DATABASE_MODE=2)  
+- **Testing**: `ep-restless-cloud` (DATABASE_MODE=3)
+
+**Critical Safety Features:**
+- Tests automatically set `DATABASE_MODE=3 NODE_ENV=test`
+- Production operations require explicit confirmation
+- Test database completely isolated from production
+- Runtime validation prevents cross-environment contamination
 
 ## Architecture Overview
 

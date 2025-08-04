@@ -1,7 +1,19 @@
 import { PrismaClient } from '@prisma/client'
+import { getDatabaseUrl, isTestMode } from './db-config'
+
+// Ensure we're in test mode
+if (!isTestMode()) {
+  throw new Error('🚨 test-db.ts can only be used in test mode! Set DATABASE_MODE=3 and NODE_ENV=test')
+}
 
 // Test database instance - create fresh client for tests
-export const testDb = new PrismaClient()
+export const testDb = new PrismaClient({
+  datasources: {
+    db: {
+      url: getDatabaseUrl() // This will be the test URL due to mode check above
+    }
+  }
+})
 
 // Clean up all tables for a fresh test state
 export async function cleanupTestDb() {
