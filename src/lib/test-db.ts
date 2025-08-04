@@ -7,22 +7,29 @@ export const testDb = new PrismaClient()
 export async function cleanupTestDb() {
   try {
     // Delete in order to respect foreign key constraints
-    await testDb.problemCategory.deleteMany()
-    await testDb.problem.deleteMany()
-    await testDb.category.deleteMany()
-    await testDb.user.deleteMany()
+    await testDb.problemCategory.deleteMany({})
+    await testDb.problem.deleteMany({})
+    await testDb.category.deleteMany({})
+    await testDb.user.deleteMany({})
+    
+    // Verify cleanup worked
+    const remainingUsers = await testDb.user.count()
+    const remainingProblems = await testDb.problem.count()
+    
+    if (remainingUsers > 0 || remainingProblems > 0) {
+      throw new Error(`Cleanup failed: ${remainingUsers} users, ${remainingProblems} problems remaining`)
+    }
   } catch (error) {
-    console.log('Cleanup error:', error)
+    console.error('Database cleanup error:', error)
+    throw error
   }
 }
 
 // Seed test data
 export async function seedTestData() {
-  // Create test user
-  const testUser = await testDb.user.upsert({
-    where: { id: 'test-user-id' },
-    update: {},
-    create: {
+  // Create test user (cleanup ensures this is always fresh)
+  const testUser = await testDb.user.create({
+    data: {
       id: 'test-user-id',
       email: 'test@example.com',
       firstName: 'Test',
@@ -31,16 +38,12 @@ export async function seedTestData() {
   })
 
   // Create test categories
-  const arrayCategory = await testDb.category.upsert({
-    where: { name: 'Array' },
-    update: {},
-    create: { name: 'Array' },
+  const arrayCategory = await testDb.category.create({
+    data: { name: 'Array' },
   })
 
-  const hashCategory = await testDb.category.upsert({
-    where: { name: 'Hash Table' },
-    update: {},
-    create: { name: 'Hash Table' },
+  const hashCategory = await testDb.category.create({
+    data: { name: 'Hash Table' },
   })
 
   // Create test problem
@@ -52,7 +55,7 @@ export async function seedTestData() {
       languageUsed: 'JavaScript',
       solutionNotes: 'Use hash map for O(n) solution',
       whatWentWrong: 'Initially tried brute force',
-      triggerKeywords: ['sum', 'hashmap'],
+      triggerKeywords: 'sum, hashmap',
       timeComplexity: 'O(n)',
       spaceComplexity: 'O(n)',
       wasHard: false,
