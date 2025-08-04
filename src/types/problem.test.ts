@@ -1,4 +1,5 @@
 import { Problem } from "./problem";
+import { describe, it, expect } from 'vitest';
 
 describe("Problem type", () => {
   it("should accept a valid Problem object", () => {

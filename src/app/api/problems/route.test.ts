@@ -1,4 +1,5 @@
 import { GET, POST } from "./route";
+import { describe, it, expect } from 'vitest';
 
 describe("/api/problems API", () => {
   it("should return problems on GET", async () => {
