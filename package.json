@@ -12,6 +12,8 @@
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:run": "vitest run",
+    "test:db": "dotenv -e .env.test.local -e .env -- sh -c 'DATABASE_URL=$DATABASE_URL_TEST npx prisma db push'",
+    "test:db:reset": "dotenv -e .env.test.local -e .env -- sh -c 'DATABASE_URL=$DATABASE_URL_TEST npx prisma db push --force-reset'",
     "cy:open": "cypress open"
   },
   "dependencies": {
@@ -34,6 +36,7 @@
     "@types/react-dom": "^19",
     "@vitejs/plugin-react": "^4.7.0",
     "@vitest/ui": "^3.2.4",
+    "dotenv-cli": "^10.0.0",
     "eslint": "^9",
     "eslint-config-next": "15.3.4",
     "jsdom": "^26.1.0",

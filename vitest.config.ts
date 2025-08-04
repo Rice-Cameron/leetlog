@@ -8,6 +8,10 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.ts'],
     globals: true,
+    env: {
+      // Load test environment variables
+      DATABASE_URL: process.env.DATABASE_URL_TEST || process.env.DATABASE_URL,
+    },
   },
   resolve: {
     alias: {
