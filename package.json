@@ -14,6 +14,9 @@
     "test:run": "vitest run",
     "test:db": "dotenv -e .env.test.local -e .env -- sh -c 'DATABASE_URL=$DATABASE_URL_TEST npx prisma db push'",
     "test:db:reset": "dotenv -e .env.test.local -e .env -- sh -c 'DATABASE_URL=$DATABASE_URL_TEST npx prisma db push --force-reset'",
+    "seed": "tsx scripts/seed.ts",
+    "safe-seed": "tsx scripts/safe-seed.ts",
+    "quick-data": "tsx scripts/quick-data.ts",
     "cy:open": "cypress open"
   },
   "dependencies": {
@@ -42,6 +45,7 @@
     "jsdom": "^26.1.0",
     "prisma": "^6.10.1",
     "tailwindcss": "^4",
+    "tsx": "^4.20.3",
     "typescript": "^5",
     "vitest": "^3.2.4"
   }

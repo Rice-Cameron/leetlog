@@ -26,13 +26,13 @@ model Problem {
   dateSolved      DateTime          @default(now())
   solutionNotes   String
   whatWentWrong   String
-  triggerKeywords String[]
   timeComplexity  String
   spaceComplexity String
   wasHard         Boolean
   userId          String
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @updatedAt
+  triggerKeywords String
   user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
   categories      ProblemCategory[]
 

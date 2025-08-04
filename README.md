@@ -72,6 +72,45 @@ The project uses Turbopack for faster development builds. You can run the develo
 npm run dev --turbopack
 ```
 
+### Local Webhook Development
+
+For testing Clerk webhooks locally, you'll need to expose your local development server to the internet using ngrok:
+
+1. **Install ngrok** (if not already installed):
+   ```bash
+   # macOS
+   brew install ngrok
+   
+   # Or download from https://ngrok.com/download
+   ```
+
+2. **Start your development server**:
+   ```bash
+   npm run dev
+   ```
+
+3. **In a separate terminal, expose your local server**:
+   ```bash
+   ngrok http 3000
+   ```
+
+4. **Configure Clerk webhook**:
+   - Copy the HTTPS forwarding URL from ngrok (e.g., `https://abc123.ngrok.io`)
+   - Go to [Clerk Dashboard](https://dashboard.clerk.com)
+   - Navigate to **Configure → Webhooks**
+   - Click **Add Endpoint**
+   - **Endpoint URL**: `https://your-ngrok-url.ngrok.io/api/webhooks/clerk`
+   - **Events**: Select `user.created`, `user.updated`, `user.deleted`
+   - Click **Create**
+   - Copy the **Signing Secret** and add it to your `.env` as `CLERK_WEBHOOK_SECRET`
+
+5. **Test the webhook**:
+   - Create a new user in your app
+   - Check your development server logs for webhook POST requests
+   - Verify user records are created in your database
+
+**Note**: ngrok URLs change each time you restart ngrok (unless you have a paid plan). Remember to update the webhook URL in Clerk Dashboard if your ngrok URL changes.
+
 ## Building
 
 To build the project for production, run:
