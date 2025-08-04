@@ -119,19 +119,45 @@ To build the project for production, run:
 npm run build
 ```
 
-## Prisma
+## Database Management
 
-To run the Prisma Studio, run:
+### Prisma Commands
 
-```bash
-npm run studio
-```
-
-To generate Prisma Client, run:
+To run the Prisma Studio:
 
 ```bash
-npm run generate
+npx prisma studio
 ```
+
+To generate Prisma Client:
+
+```bash
+npx prisma generate
+```
+
+### Database Scripts
+
+⚠️  **IMPORTANT**: All database scripts include environment detection and safety prompts to prevent accidental data loss.
+
+```bash
+# Seeding (adds sample data)
+npm run seed          # Protected seeding with confirmation prompts
+npm run safe-seed     # Alternative seeding script  
+npm run quick-data    # Add sample problems (requires existing user)
+
+# Database Reset (DANGEROUS)
+npm run safe-reset    # Reset all tables (BLOCKED for production)
+```
+
+### Database Safety Features
+
+- **Environment Detection**: Automatically detects production/test/development environments
+- **Production Protection**: Blocks destructive operations on production databases  
+- **Confirmation Prompts**: Requires explicit "CONFIRM DELETE" for dangerous operations
+- **Backup Warnings**: Shows data counts before destructive operations
+- **URL Validation**: Checks database URL patterns to identify environments
+
+**Production databases are protected** - destructive operations either require explicit confirmation or are blocked entirely.
 
 ## Contributing
 

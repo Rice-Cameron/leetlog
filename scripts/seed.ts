@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client'
+import { createSafeDbClient, getDatabaseEnvironment, confirmDestructiveOperation, createBackup } from './db-utils'
 
-const prisma = new PrismaClient()
+const prisma = createSafeDbClient()
 
 const categories = [
   'Array', 'Hash Table', 'Linked List', 'Math', 'Two Pointers', 'String',
@@ -20,7 +21,7 @@ const sampleProblems = [
     languageUsed: 'JavaScript',
     solutionNotes: 'Use hash map to store complements and their indices',
     whatWentWrong: 'Initially tried brute force O(n²) solution',
-    triggerKeywords: ['complement', 'hash map', 'indices'],
+    triggerKeywords: 'complement, hash map, indices',
     timeComplexity: 'O(n)',
     spaceComplexity: 'O(n)',
     wasHard: false,
@@ -33,7 +34,7 @@ const sampleProblems = [
     languageUsed: 'Python',
     solutionNotes: 'Simulate addition with carry, create new linked list',
     whatWentWrong: 'Forgot to handle final carry case',
-    triggerKeywords: ['linked list', 'carry', 'simulation'],
+    triggerKeywords: 'linked list, carry, simulation',
     timeComplexity: 'O(max(m,n))',
     spaceComplexity: 'O(max(m,n))',
     wasHard: true,
@@ -46,7 +47,7 @@ const sampleProblems = [
     languageUsed: 'Java',
     solutionNotes: 'Sliding window with hash set to track characters',
     whatWentWrong: 'Had off-by-one errors with window boundaries',
-    triggerKeywords: ['sliding window', 'hash set', 'substring'],
+    triggerKeywords: 'sliding window, hash set, substring',
     timeComplexity: 'O(n)',
     spaceComplexity: 'O(min(m,n))',
     wasHard: false,
@@ -59,7 +60,7 @@ const sampleProblems = [
     languageUsed: 'C++',
     solutionNotes: 'Binary search on smaller array to find partition',
     whatWentWrong: 'Complex edge cases with array boundaries',
-    triggerKeywords: ['binary search', 'partition', 'median'],
+    triggerKeywords: 'binary search, partition, median',
     timeComplexity: 'O(log(min(m,n)))',
     spaceComplexity: 'O(1)',
     wasHard: true,
@@ -72,7 +73,7 @@ const sampleProblems = [
     languageUsed: 'Python',
     solutionNotes: 'Expand around centers approach',
     whatWentWrong: 'Initially missed even-length palindromes',
-    triggerKeywords: ['palindrome', 'expand around center', 'substring'],
+    triggerKeywords: 'palindrome, expand around center, substring',
     timeComplexity: 'O(n²)',
     spaceComplexity: 'O(1)',
     wasHard: false,
@@ -85,7 +86,7 @@ const sampleProblems = [
     languageUsed: 'JavaScript',
     solutionNotes: 'Mathematical pattern to directly place characters',
     whatWentWrong: 'Struggled with the mathematical formula',
-    triggerKeywords: ['pattern', 'mathematical', 'string manipulation'],
+    triggerKeywords: 'pattern, mathematical, string manipulation',
     timeComplexity: 'O(n)',
     spaceComplexity: 'O(n)',
     wasHard: true,
@@ -98,7 +99,7 @@ const sampleProblems = [
     languageUsed: 'Java',
     solutionNotes: 'Handle overflow by checking before multiplication',
     whatWentWrong: 'Overflow handling was tricky',
-    triggerKeywords: ['overflow', 'integer manipulation', 'bounds checking'],
+    triggerKeywords: 'overflow, integer manipulation, bounds checking',
     timeComplexity: 'O(log(x))',
     spaceComplexity: 'O(1)',
     wasHard: false,
@@ -111,7 +112,7 @@ const sampleProblems = [
     languageUsed: 'C++',
     solutionNotes: 'Careful state machine for parsing',
     whatWentWrong: 'Many edge cases with whitespace and signs',
-    triggerKeywords: ['parsing', 'state machine', 'edge cases'],
+    triggerKeywords: 'parsing, state machine, edge cases',
     timeComplexity: 'O(n)',
     spaceComplexity: 'O(1)',
     wasHard: true,
@@ -124,7 +125,7 @@ const sampleProblems = [
     languageUsed: 'Python',
     solutionNotes: 'Reverse half the number to avoid overflow',
     whatWentWrong: 'Initially converted to string which was not optimal',
-    triggerKeywords: ['palindrome', 'number reversal', 'optimization'],
+    triggerKeywords: 'palindrome, number reversal, optimization',
     timeComplexity: 'O(log(n))',
     spaceComplexity: 'O(1)',
     wasHard: false,
@@ -137,7 +138,7 @@ const sampleProblems = [
     languageUsed: 'Java',
     solutionNotes: 'Dynamic programming with 2D table',
     whatWentWrong: 'Complex state transitions with * and .',
-    triggerKeywords: ['dynamic programming', 'regex', 'state transitions'],
+    triggerKeywords: 'dynamic programming, regex, state transitions',
     timeComplexity: 'O(mn)',
     spaceComplexity: 'O(mn)',
     wasHard: true,
@@ -146,7 +147,23 @@ const sampleProblems = [
 ]
 
 async function main() {
+  const environment = getDatabaseEnvironment()
   console.log('🌱 Starting database seeding...')
+  
+  // Warn for production seeding
+  if (environment === 'production') {
+    const confirmed = await confirmDestructiveOperation(
+      'SEED PRODUCTION DATABASE (will add sample data)',
+      environment
+    )
+    
+    if (!confirmed) {
+      console.log('✋ Seeding cancelled by user')
+      process.exit(0)
+    }
+    
+    await createBackup(prisma, 'seeding')
+  }
   
   try {
     // Create a sample user (you can update this with your actual user ID from Clerk)

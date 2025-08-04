@@ -16,6 +16,8 @@
     "test:db:reset": "dotenv -e .env.test.local -e .env -- sh -c 'DATABASE_URL=$DATABASE_URL_TEST npx prisma db push --force-reset'",
     "seed": "tsx scripts/seed.ts",
     "safe-seed": "tsx scripts/safe-seed.ts",
+    "safe-reset": "tsx scripts/safe-reset.ts",
+    "test-env": "tsx scripts/test-env-detection.ts",
     "quick-data": "tsx scripts/quick-data.ts",
     "cy:open": "cypress open"
   },

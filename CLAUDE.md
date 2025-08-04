@@ -17,6 +17,23 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `npx prisma db push` - Push schema changes to database
 - `npx prisma migrate dev` - Create and apply new migration
 
+## Database Scripts
+
+⚠️  **IMPORTANT**: All database scripts now include environment detection and safety prompts
+
+- `npm run seed` - Populate database with sample data (requires confirmation for production)
+- `npm run safe-seed` - Alternative seeding script with safety checks
+- `npm run safe-reset` - Reset database tables (BLOCKED for production, requires confirmation for development)
+- `npm run quick-data` - Add a few sample problems (requires existing user)
+
+### Database Safety Features
+
+- **Environment Detection**: Automatically detects production/test/development environments
+- **Production Protection**: Blocks destructive operations on production databases
+- **Confirmation Prompts**: Requires explicit "CONFIRM DELETE" for dangerous operations
+- **Backup Warnings**: Shows data counts before destructive operations
+- **URL Validation**: Checks database URL patterns to identify environments
+
 ## Architecture Overview
 
 LeetLog is a Next.js 15 application for tracking LeetCode problem-solving progress. Key architectural patterns:
