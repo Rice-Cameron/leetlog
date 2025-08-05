@@ -46,7 +46,8 @@ jobs:
 
     - name: Setup test database schema
       env:
-        DATABASE_URL_TEST: postgresql://postgres:postgres@localhost:5432/leetlog_test
+        DATABASE_URL: ${{ secrets.DATABASE_URL_TEST }}
+        DATABASE_URL_TEST: ${{ secrets.DATABASE_URL_TEST }}
         DATABASE_MODE: 3
         NODE_ENV: test
       run: |
@@ -68,7 +69,8 @@ jobs:
 
     - name: Run test suite
       env:
-        DATABASE_URL_TEST: postgresql://postgres:postgres@localhost:5432/leetlog_test
+        DATABASE_URL: ${{ secrets.DATABASE_URL_TEST }}
+        DATABASE_URL_TEST: ${{ secrets.DATABASE_URL_TEST }}
         DATABASE_MODE: 3
         NODE_ENV: test
       run: |
@@ -78,7 +80,8 @@ jobs:
 
     - name: Build application
       env:
-        DATABASE_URL_DEV: postgresql://postgres:postgres@localhost:5432/leetlog_test
+        DATABASE_URL: ${{ secrets.DATABASE_URL_DEV }}
+        DATABASE_URL_DEV: ${{ secrets.DATABASE_URL_DEV }}
         DATABASE_MODE: 1
         NODE_ENV: production
         NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: pk_test_dummy_key_for_build
@@ -91,7 +94,8 @@ jobs:
 
     - name: Test database safety system
       env:
-        DATABASE_URL_TEST: postgresql://postgres:postgres@localhost:5432/leetlog_test
+        DATABASE_URL: ${{ secrets.DATABASE_URL_TEST }}
+        DATABASE_URL_TEST: ${{ secrets.DATABASE_URL_TEST }}
         DATABASE_MODE: 3
         NODE_ENV: test
       run: |
