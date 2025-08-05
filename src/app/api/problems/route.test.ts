@@ -1,10 +1,18 @@
 import { GET, POST } from "./route";
-import { describe, it, expect } from 'vitest';
-import { mockAuthenticatedUser, mockUnauthenticatedUser } from '@/test/auth-utils';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+
+// Mock the auth function locally
+const mockAuth = vi.hoisted(() => vi.fn())
+vi.mock('@clerk/nextjs/server', () => ({
+  auth: mockAuth
+}))
 
 describe("/api/problems API", () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+  })
   it("should return problems for authenticated user", async () => {
-    mockAuthenticatedUser('test-user-id')
+    mockAuth.mockResolvedValue({ userId: 'test-user-id' })
     
     const res = await GET();
     const data = await res.json();
@@ -14,7 +22,7 @@ describe("/api/problems API", () => {
   });
 
   it("should return 401 for unauthenticated GET request", async () => {
-    mockUnauthenticatedUser()
+    mockAuth.mockResolvedValue({ userId: null })
     
     const res = await GET();
     
@@ -22,7 +30,7 @@ describe("/api/problems API", () => {
   });
 
   it("should create a problem for authenticated user", async () => {
-    mockAuthenticatedUser('test-user-id')
+    mockAuth.mockResolvedValue({ userId: 'test-user-id' })
     
     const req = new Request("http://localhost/api/problems", {
       method: "POST",
@@ -48,7 +56,7 @@ describe("/api/problems API", () => {
   });
 
   it("should return 401 for unauthenticated POST request", async () => {
-    mockUnauthenticatedUser()
+    mockAuth.mockResolvedValue({ userId: null })
     
     const req = new Request("http://localhost/api/problems", {
       method: "POST",
