@@ -2,12 +2,25 @@
   "name": "leetlog",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "test": "DATABASE_MODE=3 NODE_ENV=test vitest",
+    "test:ui": "DATABASE_MODE=3 NODE_ENV=test vitest --ui",
+    "test:run": "DATABASE_MODE=3 NODE_ENV=test vitest run",
+    "test:db": "DATABASE_MODE=3 NODE_ENV=test npx prisma db push",
+    "test:db:reset": "DATABASE_MODE=3 NODE_ENV=test npx prisma db push --force-reset",
+    "seed": "tsx scripts/seed.ts",
+    "safe-seed": "tsx scripts/safe-seed.ts",
+    "safe-reset": "tsx scripts/safe-reset.ts",
+    "test-env": "tsx scripts/test-env-detection.ts",
+    "test-db-mode": "tsx scripts/test-database-mode.ts",
+    "quick-data": "tsx scripts/quick-data.ts",
+    "cy:open": "cypress open"
   },
   "dependencies": {
     "@clerk/nextjs": "^6.23.2",
@@ -22,13 +35,21 @@
     "@eslint/eslintrc": "^3",
     "@prisma/client": "^6.10.1",
     "@tailwindcss/postcss": "^4",
+    "@testing-library/jest-dom": "^6.6.4",
+    "@testing-library/react": "^16.3.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@vitejs/plugin-react": "^4.7.0",
+    "@vitest/ui": "^3.2.4",
+    "dotenv-cli": "^10.0.0",
     "eslint": "^9",
     "eslint-config-next": "15.3.4",
+    "jsdom": "^26.1.0",
     "prisma": "^6.10.1",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "tsx": "^4.20.3",
+    "typescript": "^5",
+    "vitest": "^3.2.4"
   }
 }

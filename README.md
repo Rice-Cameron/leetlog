@@ -2,126 +2,123 @@
 
 **Live Demo:** [https://leetlog-livid.vercel.app/](https://leetlog-livid.vercel.app/)
 
-A modern web application for tracking and organizing your LeetCode problem solving journey. LeetLog helps you keep track of the problems you've solved, your solutions, and important metadata like time and space complexity.
+A modern full-stack application for tracking LeetCode problem-solving progress with advanced database safety features and comprehensive testing infrastructure.
 
-## Features
+## Key Features
 
-- Track LeetCode problems with title, URL, and difficulty
-- Document solution approaches and challenges
-- Record time and space complexity
-- Track problem categories and trigger keywords
-- Modern, responsive UI
-- Built with TypeScript for type safety
+- **Problem Tracking**: LeetCode problems with difficulty, categories, and complexity analysis
+- **Advanced Database Management**: Multi-environment system with production safety locks
+- **Comprehensive Testing**: Vitest + isolated test database with 100% passing tests
+- **Modern Stack**: Next.js 15, React 19, TypeScript, Prisma ORM, Neon PostgreSQL
+- **Production Ready**: Deployed on Vercel with CI/CD and database migrations
 
-## Tech Stack
+## Tech Highlights
 
-- Next.js 15.3.4
-- React 19
-- TypeScript 5
-- Tailwind CSS 4
-- Prisma ORM 6.10.1
-- Neon (PostgreSQL)
+- **Backend**: Next.js 15 App Router, Prisma ORM, PostgreSQL (Neon)
+- **Frontend**: React 19, TypeScript 5, Tailwind CSS 4
+- **Authentication**: Clerk with webhook-based user management
+- **Testing**: Vitest, React Testing Library, database isolation
+- **Database Safety**: Multi-environment protection, confirmation prompts, automatic detection
+- **DevOps**: Vercel deployment, environment management, schema migrations
 
-_Note: Initially, SQLite was used for local development, but was later replaced with Neon (PostgreSQL) once deployed._
-
-## Getting Started
-
-Then, edit `.env` to add your own secrets and configuration values.
-
-1. Clone the repository:
-
-   ```bash
-   git clone https://github.com/Rice-Cameron/leetlog.git
-   cd leetlog
-   ```
-
-2. Install dependencies:
-
-   ```bash
-   npm install
-   ```
-
-   **Environment Variables:**
-
-   Before running the app, copy the example environment file:
-
-   ```bash
-   cp .env.copy .env
-   ```
-
-3. Run the development server:
-
-   ```bash
-   npm run dev
-   ```
-
-4. Open [http://localhost:3000](http://localhost:3000) with your browser to see the application.
-
-## Project Structure
-
-- `/app` - Next.js App Router pages and components
-- `/prisma` - Database schema and migrations
-- `/src/types` - TypeScript type definitions
-- `/public` - Static assets
-
-## Development
-
-The project uses Turbopack for faster development builds. You can run the development server with:
+## Quick Start
 
 ```bash
-npm run dev --turbopack
+# Clone and setup
+git clone https://github.com/Rice-Cameron/leetlog.git
+cd leetlog
+npm install
+
+# Configure environment
+cp .env.copy .env
+# Edit .env with your database URLs and Clerk keys
+
+# Start development
+npm run dev
 ```
 
-## Building
+Open [http://localhost:3000](http://localhost:3000) to see the application.
 
-To build the project for production, run:
+## Database Safety System
+
+LeetLog implements a sophisticated `DATABASE_MODE` system to prevent accidental production data loss:
 
 ```bash
-npm run build
+DATABASE_MODE=1  # Development (default)
+DATABASE_MODE=2  # Production (protected)  
+DATABASE_MODE=3  # Testing (isolated)
 ```
 
-## Prisma
+**Safety Features:**
+- ✅ Production operations require explicit confirmation
+- ✅ Tests automatically use isolated database branch
+- ✅ Multiple validation layers prevent cross-environment contamination
+- ✅ Runtime checks with detailed logging
 
-To run the Prisma Studio, run:
+## Key Commands
 
 ```bash
-npm run studio
+# Development
+npm run dev              # Start dev server (with Turbopack support)
+npm run build            # Production build
+
+# Database
+npx prisma studio        # Database browser
+npm run seed             # Add sample data (production-safe)
+npm run test-db-mode     # Validate database configuration
+
+# Testing
+npm run test             # Run full test suite
+npm run test:ui          # Interactive test UI
 ```
 
-To generate Prisma Client, run:
+## Project Architecture
 
-```bash
-npm run generate
 ```
+src/
+├── app/                 # Next.js App Router (pages & API)
+├── components/          # Reusable UI components
+├── lib/                 # Database config & utilities
+├── types/               # TypeScript definitions
+└── test/                # Test setup & utilities
+
+scripts/                 # Database management scripts
+docs/                    # Detailed documentation
+```
+
+## Documentation
+
+- 🏗️ **[Technical Architecture](./src/README.md)** - Implementation details, patterns
+- 🗄️ **[Database System](./docs/DATABASE_MODES.md)** - Environment management guide  
+- 📊 **[Scripts & Tools](./scripts/README.md)** - Database utilities documentation
+
+## Development Highlights
+
+**Testing Infrastructure:**
+- Vitest with React Testing Library
+- Isolated test database (Neon branch)
+- Sequential test execution for database safety
+- Comprehensive API and component testing
+
+**Database Safety:**
+- Multi-environment configuration system
+- Production database protection with confirmation prompts
+- Automatic environment detection and validation
+- Safe seeding and migration scripts
+
+**Modern Development:**
+- TypeScript strict mode with comprehensive type safety
+- Tailwind CSS 4 for styling
+- Clerk authentication with webhook integration
+- Prisma ORM with PostgreSQL
 
 ## Contributing
 
 1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out the [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+2. Create feature branch (`git checkout -b feature/amazing-feature`)  
+3. Commit changes (`git commit -m 'Add amazing feature'`)
+4. Push to branch (`git push origin feature/amazing-feature`)
+5. Open Pull Request
 
 ## TODO
 
@@ -129,11 +126,11 @@ Check out the [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 - [ ] Implement more user settings
 - [ ] Add support for importing/exporting problems
 - [ ] Improve mobile responsiveness
-- [ ] Write tests
+- [x] Write tests (Vitest + testing infrastructure complete)
 - [ ] Implement dark mode
 - [ ] AI Integration to analyze weeks work of Leetcode problems
 - [ ] Add Leetcode tips sections
 
-## Database Recommendation
+## License
 
-This project uses [Neon](https://neon.tech/) with PostgreSQL for both local development and production. Neon offers a free, serverless, and cloud-native PostgreSQL database that works perfectly with Vercel and Prisma.
+MIT License - see LICENSE file for details.

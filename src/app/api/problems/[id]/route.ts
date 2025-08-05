@@ -72,6 +72,16 @@ export async function PUT(
     }
 
     const data = (await request.json()) as CreateProblem;
+    
+    // Deduplicate categories to prevent unique constraint violations
+    const uniqueCategories = [...new Set(data.categories)];
+    
+    // First delete existing problem categories
+    await prisma.problemCategory.deleteMany({
+      where: { problemId: parseInt(resolvedParams.id) }
+    });
+
+    // Then update the problem and add new categories
     const problem = await prisma.problem.update({
       where: { id: parseInt(resolvedParams.id) },
       data: {
@@ -86,8 +96,7 @@ export async function PUT(
         spaceComplexity: data.spaceComplexity,
         wasHard: data.wasHard,
         categories: {
-          set: [],
-          create: data.categories.map((category) => ({
+          create: uniqueCategories.map((category) => ({
             category: {
               connectOrCreate: {
                 where: { name: category },

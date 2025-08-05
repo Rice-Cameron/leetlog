@@ -64,6 +64,10 @@ export async function POST(request: Request) {
     }
 
     const data = (await request.json()) as CreateProblem;
+    
+    // Deduplicate categories to prevent unique constraint violations
+    const uniqueCategories = [...new Set(data.categories)];
+    
     const problem = await prisma.problem.create({
       data: {
         title: data.title,
@@ -78,7 +82,7 @@ export async function POST(request: Request) {
         wasHard: data.wasHard,
         userId: userId,
         categories: {
-          create: data.categories.map((category) => ({
+          create: uniqueCategories.map((category) => ({
             category: {
               connectOrCreate: {
                 where: { name: category },
