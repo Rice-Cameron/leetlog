@@ -1,4 +1,8 @@
+import { config } from 'dotenv'
 import { getDatabaseConfig, validateDatabaseConfig } from '../src/lib/db-config'
+
+// Load environment variables from .env file
+config()
 
 console.log('🧪 Testing DATABASE_MODE Override')
 console.log('=================================')
