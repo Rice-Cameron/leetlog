@@ -1,5 +1,5 @@
 import { GET, POST } from "./route";
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { mockAuthenticatedUser, mockUnauthenticatedUser } from '@/test/auth-utils';
 
 describe("/api/problems API", () => {

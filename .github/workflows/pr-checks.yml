@@ -1,0 +1,79 @@
+name: PR Checks
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: leetlog_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Setup test environment
+      env:
+        DATABASE_URL_TEST: postgresql://postgres:postgres@localhost:5432/leetlog_test
+        DATABASE_MODE: 3
+        NODE_ENV: test
+      run: |
+        echo "DATABASE_URL_TEST=postgresql://postgres:postgres@localhost:5432/leetlog_test" >> $GITHUB_ENV
+        echo "DATABASE_MODE=3" >> $GITHUB_ENV
+        echo "NODE_ENV=test" >> $GITHUB_ENV
+
+    - name: Setup test database
+      env:
+        DATABASE_URL_TEST: postgresql://postgres:postgres@localhost:5432/leetlog_test
+        DATABASE_MODE: 3
+        NODE_ENV: test
+      run: npm run test:db
+
+    - name: Run linter
+      run: npm run lint
+
+    - name: Run tests
+      env:
+        DATABASE_URL_TEST: postgresql://postgres:postgres@localhost:5432/leetlog_test
+        DATABASE_MODE: 3
+        NODE_ENV: test
+      run: npm run test:run
+
+    - name: Build for production
+      env:
+        DATABASE_URL_DEV: postgresql://postgres:postgres@localhost:5432/leetlog_test
+        DATABASE_MODE: 1
+        NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: pk_test_dummy_key_for_build
+        CLERK_SECRET_KEY: sk_test_dummy_key_for_build
+        CLERK_WEBHOOK_SECRET: whsec_dummy_webhook_secret_for_build
+      run: npm run build
+
+    - name: Report status
+      if: always()
+      run: |
+        echo "✅ Linting: ${{ job.steps.lint.outcome }}"
+        echo "✅ Tests: ${{ job.steps.test.outcome }}"
+        echo "✅ Build: ${{ job.steps.build.outcome }}"
