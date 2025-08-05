@@ -27,7 +27,10 @@ export function getDatabaseConfig(): DatabaseConfig {
   const mode = process.env.DATABASE_MODE || "1";
   const nodeEnv = process.env.NODE_ENV || "";
 
-  console.log(`🗄️  Database Mode: ${mode} (NODE_ENV: ${nodeEnv})`);
+  // Only log database mode in non-production environments
+  if (nodeEnv !== "production") {
+    console.log(`🗄️  Database Mode: ${mode} (NODE_ENV: ${nodeEnv})`);
+  }
 
   // Force test mode if NODE_ENV=test (safety override)
   if (nodeEnv === "test") {
@@ -85,7 +88,14 @@ export function getDatabaseUrl(): string {
   const config = getDatabaseConfig();
 
   if (!config.url) {
-    const errorMsg = `Database URL not configured for ${config.mode} mode (DATABASE_MODE=${process.env.DATABASE_MODE})`;
+    // Map mode to expected environment variable
+    const envVarMap: Record<DatabaseMode, string> = {
+      development: "DATABASE_URL_DEV",
+      production: "DATABASE_URL_PROD",
+      test: "DATABASE_URL_TEST"
+    };
+    const expectedEnvVar = envVarMap[config.mode];
+    const errorMsg = `Database URL not configured for ${config.mode} mode (DATABASE_MODE=${process.env.DATABASE_MODE}). Set ${expectedEnvVar} in your environment.`;
     console.error(`❌ ${errorMsg}`);
     throw new Error(errorMsg);
   }
@@ -97,18 +107,16 @@ export function getDatabaseUrl(): string {
     );
   }
 
-  console.log(
-    `📊 Active Database: ${config.mode.toUpperCase()} (${config.url.substring(
-      0,
-      50
-    )}...)`
-  );
-
-  // Log the specific branch for verification
-  if (config.mode === "test") {
-    console.log(`🧪 Test Branch: ${NEON_BRANCHES.TEST} (isolated)`);
-  } else if (config.mode === "production") {
-    console.log(`🏭 Production Branch: ${NEON_BRANCHES.PRODUCTION}`);
+  // Only log database details in non-production environments
+  if (process.env.NODE_ENV !== "production") {
+    console.log(`📊 Active Database: ${config.mode.toUpperCase()}`);
+    
+    // Log the specific branch for verification
+    if (config.mode === "test") {
+      console.log(`🧪 Test Branch: ${NEON_BRANCHES.TEST} (isolated)`);
+    } else if (config.mode === "production") {
+      console.log(`🏭 Production Branch: ${NEON_BRANCHES.PRODUCTION}`);
+    }
   }
 
   return config.url;

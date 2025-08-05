@@ -40,11 +40,16 @@ Type "CONFIRM DELETE" to proceed (anything else cancels): `
 // Safe database client with environment awareness
 export function createSafeDbClient(): PrismaClient {
   const environment = getDatabaseEnvironment()
+  const databaseUrl = getDatabaseUrl()
   
-  console.log(`🔍 Database Environment: ${environment.toUpperCase()}`)
-  console.log(`📊 Database URL: ${process.env.DATABASE_URL?.substring(0, 50)}...`)
+  // Only log environment details in non-production
+  if (process.env.NODE_ENV !== "production") {
+    console.log(`🔍 Database Environment: ${environment.toUpperCase()}`)
+  }
   
-  return new PrismaClient()
+  return new PrismaClient({
+    datasources: { db: { url: databaseUrl } }
+  })
 }
 
 // Backup operations before destructive changes
