@@ -24,7 +24,7 @@ describe("Problem type", () => {
           category: { id: 2, name: "HashTable" },
         },
       ],
-      triggerKeywords: ["sum", "hashmap"],
+      triggerKeywords: "sum, hashmap",
       solutionNotes: "Use a hash map to store indices.",
       whatWentWrong: "Edge cases with negative numbers.",
       wasHard: false,
