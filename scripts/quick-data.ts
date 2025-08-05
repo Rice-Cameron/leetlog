@@ -3,8 +3,8 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
 async function main() {
-  // Use your actual user ID from earlier
-  const userId = 'user_30q3MK6wwogLn77uaXmYiPrqiNA'
+  // Get user ID from environment variable or use fallback
+  const userId = process.env.CLERK_USER_ID || 'test-user-id'
   
   console.log('📝 Adding a few sample problems...')
   

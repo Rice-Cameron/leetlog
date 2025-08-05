@@ -5,6 +5,13 @@
 
 export type DatabaseMode = "development" | "production" | "test";
 
+// Neon branch name constants
+const NEON_BRANCHES = {
+  PRODUCTION: "ep-dark-surf",
+  DEVELOPMENT: "ep-sparkling-frog", 
+  TEST: "ep-restless-cloud"
+} as const;
+
 export interface DatabaseConfig {
   mode: DatabaseMode;
   url: string;
@@ -84,7 +91,7 @@ export function getDatabaseUrl(): string {
   }
 
   // Security check: ensure we never accidentally use production URL in test mode
-  if (config.mode === "test" && config.url.includes("ep-dark-surf")) {
+  if (config.mode === "test" && config.url.includes(NEON_BRANCHES.PRODUCTION)) {
     throw new Error(
       "🚨 SAFETY VIOLATION: Test mode attempted to use production database!"
     );
@@ -99,9 +106,9 @@ export function getDatabaseUrl(): string {
 
   // Log the specific branch for verification
   if (config.mode === "test") {
-    console.log(`🧪 Test Branch: ep-restless-cloud (isolated)`);
+    console.log(`🧪 Test Branch: ${NEON_BRANCHES.TEST} (isolated)`);
   } else if (config.mode === "production") {
-    console.log(`🏭 Production Branch: ep-dark-surf`);
+    console.log(`🏭 Production Branch: ${NEON_BRANCHES.PRODUCTION}`);
   }
 
   return config.url;
@@ -141,22 +148,22 @@ export function validateDatabaseConfig(): void {
 
   // Safety verification
   if (config.mode === "test") {
-    if (config.url.includes("ep-dark-surf")) {
+    if (config.url.includes(NEON_BRANCHES.PRODUCTION)) {
       throw new Error(
         "🚨 CRITICAL SAFETY ERROR: Test mode is using production database URL!"
       );
     }
     console.log(
-      `✅ Safety Check: Test mode using isolated database (ep-restless-cloud)`
+      `✅ Safety Check: Test mode using isolated database (${NEON_BRANCHES.TEST})`
     );
   }
 
   if (config.mode === "production") {
-    if (!config.url.includes("ep-dark-surf")) {
+    if (!config.url.includes(NEON_BRANCHES.PRODUCTION)) {
       console.warn(
         `⚠️  Warning: Production mode not using expected production branch`
       );
     }
-    console.log(`✅ Production mode confirmed (ep-dark-surf)`);
+    console.log(`✅ Production mode confirmed (${NEON_BRANCHES.PRODUCTION})`);
   }
 }
