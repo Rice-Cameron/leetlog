@@ -11,34 +11,46 @@ console.log(`   Result: ${currentEnv.toUpperCase()}`)
 // Test with mock environments
 console.log('\n2. Testing Mock Environments:')
 
-// Save original values
+// Note: We can't directly modify NODE_ENV as it's readonly, so we'll test with different DATABASE_URL patterns
+console.log('\n   📊 Testing Production Detection (by URL pattern):')
+// Mock production URL pattern
 const originalDbUrl = process.env.DATABASE_URL
-const originalNodeEnv = process.env.NODE_ENV
-
-// Test production detection
-console.log('\n   📊 Testing Production Detection:')
-process.env.DATABASE_URL = 'postgresql://user@ep-prod-123.us-west-2.aws.neon.tech/prod'
-process.env.NODE_ENV = 'production'
+Object.defineProperty(process.env, 'DATABASE_URL', {
+  value: 'postgresql://user@ep-dark-surf-123.us-west-2.aws.neon.tech/prod',
+  writable: true,
+  configurable: true
+})
 const prodResult = getDatabaseEnvironment()
 console.log(`   ✅ Production test result: ${prodResult}`)
 
-// Test test environment detection
-console.log('\n   🧪 Testing Test Environment Detection:')
-process.env.DATABASE_URL = 'postgresql://user@ep-test-123.us-west-2.aws.neon.tech/test'
-process.env.NODE_ENV = 'test'
+console.log('\n   🧪 Testing Test Environment Detection (by URL pattern):')
+Object.defineProperty(process.env, 'DATABASE_URL', {
+  value: 'postgresql://user@ep-restless-cloud-123.us-west-2.aws.neon.tech/test',
+  writable: true,
+  configurable: true
+})
 const testResult = getDatabaseEnvironment()
 console.log(`   ✅ Test environment result: ${testResult}`)
 
-// Test development detection
-console.log('\n   💻 Testing Development Detection:')
-process.env.DATABASE_URL = 'postgresql://localhost:5432/leetlog_dev'
-process.env.NODE_ENV = 'development'
+console.log('\n   💻 Testing Development Detection (by URL pattern):')
+Object.defineProperty(process.env, 'DATABASE_URL', {
+  value: 'postgresql://user@ep-sparkling-frog-123.us-west-2.aws.neon.tech/dev',
+  writable: true,
+  configurable: true
+})
 const devResult = getDatabaseEnvironment()
 console.log(`   ✅ Development result: ${devResult}`)
 
 // Restore original values
-process.env.DATABASE_URL = originalDbUrl
-process.env.NODE_ENV = originalNodeEnv
+if (originalDbUrl) {
+  Object.defineProperty(process.env, 'DATABASE_URL', {
+    value: originalDbUrl,
+    writable: true,
+    configurable: true
+  })
+} else {
+  delete process.env.DATABASE_URL
+}
 
 console.log('\n🎯 Test Results Summary:')
 console.log(`   Production Detection: ${prodResult === 'production' ? '✅ PASS' : '❌ FAIL'}`)

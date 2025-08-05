@@ -20,7 +20,7 @@ export interface Problem {
   dateSolved: string;
   solutionNotes: string;
   whatWentWrong: string;
-  triggerKeywords: string[];
+  triggerKeywords: string;
   timeComplexity: string;
   spaceComplexity: string;
   wasHard: boolean;
@@ -36,7 +36,7 @@ export interface CreateProblem {
   languageUsed: string;
   solutionNotes: string;
   whatWentWrong: string;
-  triggerKeywords: string[];
+  triggerKeywords: string;
   timeComplexity: string;
   spaceComplexity: string;
   wasHard: boolean;

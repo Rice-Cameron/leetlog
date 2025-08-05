@@ -1,4 +1,5 @@
 import { describe, it, expect, vi } from 'vitest'
+import { NextRequest } from 'next/server'
 import { GET, POST } from './route'
 import { GET as GET_BY_ID, PUT, DELETE } from './[id]/route'
 import { testDb } from '@/test/test-utils'
@@ -56,7 +57,7 @@ describe('Problems API Integration Tests - Full CRUD Workflows', () => {
         wasHard: false,
       }
 
-      const req = new Request('http://localhost/api/problems', {
+      const req = new NextRequest('http://localhost/api/problems', {
         method: 'POST',
         body: JSON.stringify(createData),
         headers: { 'Content-Type': 'application/json' },
@@ -115,7 +116,7 @@ describe('Problems API Integration Tests - Full CRUD Workflows', () => {
         wasHard: false,
       }
 
-      const req = new Request('http://localhost/api/problems', {
+      const req = new NextRequest('http://localhost/api/problems', {
         method: 'POST',
         body: JSON.stringify(createData),
         headers: { 'Content-Type': 'application/json' },
@@ -143,7 +144,7 @@ describe('Problems API Integration Tests - Full CRUD Workflows', () => {
         wasHard: false,
       }
 
-      const req = new Request('http://localhost/api/problems', {
+      const req = new NextRequest('http://localhost/api/problems', {
         method: 'POST',
         body: JSON.stringify(createData),
         headers: { 'Content-Type': 'application/json' },
@@ -189,7 +190,7 @@ describe('Problems API Integration Tests - Full CRUD Workflows', () => {
         wasHard: true,
       }
 
-      const req = new Request('http://localhost/api/problems', {
+      const req = new NextRequest('http://localhost/api/problems', {
         method: 'POST',
         body: JSON.stringify(createData),
         headers: { 'Content-Type': 'application/json' },
@@ -217,7 +218,7 @@ describe('Problems API Integration Tests - Full CRUD Workflows', () => {
 
     it('should fetch specific problem by ID', async () => {
       const mockParams = Promise.resolve({ id: createdProblemId.toString() })
-      const mockRequest = new Request('http://localhost/api/problems/' + createdProblemId)
+      const mockRequest = new NextRequest('http://localhost/api/problems/' + createdProblemId)
 
       const response = await GET_BY_ID(mockRequest, { params: mockParams })
       const problem = await response.json()
@@ -235,7 +236,7 @@ describe('Problems API Integration Tests - Full CRUD Workflows', () => {
 
     it('should return 404 for non-existent problem', async () => {
       const mockParams = Promise.resolve({ id: '99999' })
-      const mockRequest = new Request('http://localhost/api/problems/99999')
+      const mockRequest = new NextRequest('http://localhost/api/problems/99999')
 
       const response = await GET_BY_ID(mockRequest, { params: mockParams })
       
@@ -249,7 +250,7 @@ describe('Problems API Integration Tests - Full CRUD Workflows', () => {
       mockAuth.mockResolvedValue({ userId: alternateUserId })
       
       const mockParams = Promise.resolve({ id: createdProblemId.toString() })
-      const mockRequest = new Request('http://localhost/api/problems/' + createdProblemId)
+      const mockRequest = new NextRequest('http://localhost/api/problems/' + createdProblemId)
 
       const response = await GET_BY_ID(mockRequest, { params: mockParams })
       
@@ -265,7 +266,7 @@ describe('Problems API Integration Tests - Full CRUD Workflows', () => {
       expect(response.status).toBe(401)
 
       const mockParams = Promise.resolve({ id: createdProblemId.toString() })
-      const mockRequest = new Request('http://localhost/api/problems/' + createdProblemId)
+      const mockRequest = new NextRequest('http://localhost/api/problems/' + createdProblemId)
       const singleResponse = await GET_BY_ID(mockRequest, { params: mockParams })
       expect(singleResponse.status).toBe(401)
     })
@@ -290,7 +291,7 @@ describe('Problems API Integration Tests - Full CRUD Workflows', () => {
         wasHard: false,
       }
 
-      const req = new Request('http://localhost/api/problems', {
+      const req = new NextRequest('http://localhost/api/problems', {
         method: 'POST',
         body: JSON.stringify(createData),
         headers: { 'Content-Type': 'application/json' },
@@ -317,7 +318,7 @@ describe('Problems API Integration Tests - Full CRUD Workflows', () => {
       }
 
       const mockParams = Promise.resolve({ id: createdProblemId.toString() })
-      const mockRequest = new Request('http://localhost/api/problems/' + createdProblemId, {
+      const mockRequest = new NextRequest('http://localhost/api/problems/' + createdProblemId, {
         method: 'PUT',
         body: JSON.stringify(updateData),
         headers: { 'Content-Type': 'application/json' },
@@ -366,7 +367,7 @@ describe('Problems API Integration Tests - Full CRUD Workflows', () => {
       }
 
       const mockParams = Promise.resolve({ id: '99999' })
-      const mockRequest = new Request('http://localhost/api/problems/99999', {
+      const mockRequest = new NextRequest('http://localhost/api/problems/99999', {
         method: 'PUT',
         body: JSON.stringify(updateData),
         headers: { 'Content-Type': 'application/json' },
@@ -398,7 +399,7 @@ describe('Problems API Integration Tests - Full CRUD Workflows', () => {
       mockAuth.mockResolvedValue({ userId: alternateUserId })
 
       const mockParams = Promise.resolve({ id: createdProblemId.toString() })
-      const mockRequest = new Request('http://localhost/api/problems/' + createdProblemId, {
+      const mockRequest = new NextRequest('http://localhost/api/problems/' + createdProblemId, {
         method: 'PUT',
         body: JSON.stringify(updateData),
         headers: { 'Content-Type': 'application/json' },
@@ -413,7 +414,7 @@ describe('Problems API Integration Tests - Full CRUD Workflows', () => {
       // Verify original problem wasn't modified
       mockAuth.mockResolvedValue({ userId: testUserId })
       const verifyParams = Promise.resolve({ id: createdProblemId.toString() })
-      const verifyRequest = new Request('http://localhost/api/problems/' + createdProblemId)
+      const verifyRequest = new NextRequest('http://localhost/api/problems/' + createdProblemId)
       const verifyResponse = await GET_BY_ID(verifyRequest, { params: verifyParams })
       const originalProblem = await verifyResponse.json()
       
@@ -438,7 +439,7 @@ describe('Problems API Integration Tests - Full CRUD Workflows', () => {
       }
 
       const mockParams = Promise.resolve({ id: createdProblemId.toString() })
-      const mockRequest = new Request('http://localhost/api/problems/' + createdProblemId, {
+      const mockRequest = new NextRequest('http://localhost/api/problems/' + createdProblemId, {
         method: 'PUT',
         body: JSON.stringify(updateData),
         headers: { 'Content-Type': 'application/json' },
@@ -468,7 +469,7 @@ describe('Problems API Integration Tests - Full CRUD Workflows', () => {
         wasHard: false,
       }
 
-      const req = new Request('http://localhost/api/problems', {
+      const req = new NextRequest('http://localhost/api/problems', {
         method: 'POST',
         body: JSON.stringify(createData),
         headers: { 'Content-Type': 'application/json' },
@@ -482,13 +483,13 @@ describe('Problems API Integration Tests - Full CRUD Workflows', () => {
     it('should delete existing problem and cascade delete categories', async () => {
       // Verify problem exists before deletion
       const beforeParams = Promise.resolve({ id: createdProblemId.toString() })
-      const beforeRequest = new Request('http://localhost/api/problems/' + createdProblemId)
+      const beforeRequest = new NextRequest('http://localhost/api/problems/' + createdProblemId)
       const beforeResponse = await GET_BY_ID(beforeRequest, { params: beforeParams })
       expect(beforeResponse.status).toBe(200)
 
       // Delete the problem
       const mockParams = Promise.resolve({ id: createdProblemId.toString() })
-      const mockRequest = new Request('http://localhost/api/problems/' + createdProblemId, {
+      const mockRequest = new NextRequest('http://localhost/api/problems/' + createdProblemId, {
         method: 'DELETE',
       })
 
@@ -500,7 +501,7 @@ describe('Problems API Integration Tests - Full CRUD Workflows', () => {
 
       // Verify problem is actually deleted
       const afterParams = Promise.resolve({ id: createdProblemId.toString() })
-      const afterRequest = new Request('http://localhost/api/problems/' + createdProblemId)
+      const afterRequest = new NextRequest('http://localhost/api/problems/' + createdProblemId)
       const afterResponse = await GET_BY_ID(afterRequest, { params: afterParams })
       expect(afterResponse.status).toBe(404)
 
@@ -519,7 +520,7 @@ describe('Problems API Integration Tests - Full CRUD Workflows', () => {
 
     it('should return 404 when deleting non-existent problem', async () => {
       const mockParams = Promise.resolve({ id: '99999' })
-      const mockRequest = new Request('http://localhost/api/problems/99999', {
+      const mockRequest = new NextRequest('http://localhost/api/problems/99999', {
         method: 'DELETE',
       })
 
@@ -535,7 +536,7 @@ describe('Problems API Integration Tests - Full CRUD Workflows', () => {
       mockAuth.mockResolvedValue({ userId: alternateUserId })
 
       const mockParams = Promise.resolve({ id: createdProblemId.toString() })
-      const mockRequest = new Request('http://localhost/api/problems/' + createdProblemId, {
+      const mockRequest = new NextRequest('http://localhost/api/problems/' + createdProblemId, {
         method: 'DELETE',
       })
 
@@ -548,7 +549,7 @@ describe('Problems API Integration Tests - Full CRUD Workflows', () => {
       // Verify problem still exists for original user
       mockAuth.mockResolvedValue({ userId: testUserId })
       const verifyParams = Promise.resolve({ id: createdProblemId.toString() })
-      const verifyRequest = new Request('http://localhost/api/problems/' + createdProblemId)
+      const verifyRequest = new NextRequest('http://localhost/api/problems/' + createdProblemId)
       const verifyResponse = await GET_BY_ID(verifyRequest, { params: verifyParams })
       expect(verifyResponse.status).toBe(200)
     })
@@ -557,7 +558,7 @@ describe('Problems API Integration Tests - Full CRUD Workflows', () => {
       mockAuth.mockResolvedValue({ userId: null })
 
       const mockParams = Promise.resolve({ id: createdProblemId.toString() })
-      const mockRequest = new Request('http://localhost/api/problems/' + createdProblemId, {
+      const mockRequest = new NextRequest('http://localhost/api/problems/' + createdProblemId, {
         method: 'DELETE',
       })
 
@@ -583,7 +584,7 @@ describe('Problems API Integration Tests - Full CRUD Workflows', () => {
         wasHard: false,
       }
 
-      const createReq = new Request('http://localhost/api/problems', {
+      const createReq = new NextRequest('http://localhost/api/problems', {
         method: 'POST',
         body: JSON.stringify(initialData),
         headers: { 'Content-Type': 'application/json' },
@@ -598,7 +599,7 @@ describe('Problems API Integration Tests - Full CRUD Workflows', () => {
 
       // Step 2: READ (verify creation)
       const readParams = Promise.resolve({ id: problemId.toString() })
-      const readRequest = new Request('http://localhost/api/problems/' + problemId)
+      const readRequest = new NextRequest('http://localhost/api/problems/' + problemId)
       const readResponse = await GET_BY_ID(readRequest, { params: readParams })
       const readProblem = await readResponse.json()
       
@@ -622,7 +623,7 @@ describe('Problems API Integration Tests - Full CRUD Workflows', () => {
       }
 
       const updateParams = Promise.resolve({ id: problemId.toString() })
-      const updateRequest = new Request('http://localhost/api/problems/' + problemId, {
+      const updateRequest = new NextRequest('http://localhost/api/problems/' + problemId, {
         method: 'PUT',
         body: JSON.stringify(updateData),
         headers: { 'Content-Type': 'application/json' },
@@ -638,7 +639,7 @@ describe('Problems API Integration Tests - Full CRUD Workflows', () => {
 
       // Step 4: READ (verify update)
       const verifyParams = Promise.resolve({ id: problemId.toString() })
-      const verifyRequest = new Request('http://localhost/api/problems/' + problemId)
+      const verifyRequest = new NextRequest('http://localhost/api/problems/' + problemId)
       const verifyResponse = await GET_BY_ID(verifyRequest, { params: verifyParams })
       const verifiedProblem = await verifyResponse.json()
       
@@ -649,7 +650,7 @@ describe('Problems API Integration Tests - Full CRUD Workflows', () => {
 
       // Step 5: DELETE
       const deleteParams = Promise.resolve({ id: problemId.toString() })
-      const deleteRequest = new Request('http://localhost/api/problems/' + problemId, {
+      const deleteRequest = new NextRequest('http://localhost/api/problems/' + problemId, {
         method: 'DELETE',
       })
 
@@ -661,7 +662,7 @@ describe('Problems API Integration Tests - Full CRUD Workflows', () => {
 
       // Step 6: READ (verify deletion)
       const finalParams = Promise.resolve({ id: problemId.toString() })
-      const finalRequest = new Request('http://localhost/api/problems/' + problemId)
+      const finalRequest = new NextRequest('http://localhost/api/problems/' + problemId)
       const finalResponse = await GET_BY_ID(finalRequest, { params: finalParams })
       
       expect(finalResponse.status).toBe(404)
