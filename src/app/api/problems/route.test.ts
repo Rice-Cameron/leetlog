@@ -1,6 +1,5 @@
 import { GET, POST } from "./route";
 import { describe, it, expect, vi } from 'vitest';
-import { mockAuthenticatedUser, mockUnauthenticatedUser } from '@/test/auth-utils';
 
 // Mock the auth function
 const mockAuth = vi.hoisted(() => vi.fn())

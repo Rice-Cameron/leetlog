@@ -35,7 +35,7 @@ describe("Problem type", () => {
   });
 
   it("should require required fields", () => {
-    // @ts-expect-error
+    // @ts-expect-error - Testing incomplete Problem object to ensure type safety
     const invalidProblem: Problem = { title: "Missing fields" };
     expect(invalidProblem.title).toBe("Missing fields");
   });
