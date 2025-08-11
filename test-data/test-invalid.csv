@@ -1,0 +1,6 @@
+Title,URL,Difficulty,Language Used,Date Solved,Solution Notes,What Went Wrong,Trigger Keywords,Time Complexity,Space Complexity,Was Hard,Categories
+"Valid Problem","https://leetcode.com/problems/valid/","EASY","JavaScript","2024-01-15","This one should work","Nothing went wrong","valid, test","O(n)","O(1)","false","Array"
+"Missing Title","","MEDIUM","Python","2024-01-16","Missing title field","","missing, title","O(n)","O(1)","false","String"
+"Invalid Difficulty","https://leetcode.com/problems/test/","SUPER_HARD","Java","2024-01-17","Invalid difficulty level","","invalid, difficulty","O(n)","O(1)","true","Array"
+"Missing Columns","https://leetcode.com/problems/incomplete/"
+"Too Many Columns","https://leetcode.com/problems/extra/","EASY","JavaScript","2024-01-18","Too many columns","","extra, columns","O(n)","O(1)","false","Array","Extra Column","Another Extra"
