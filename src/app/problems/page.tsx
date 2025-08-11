@@ -16,6 +16,9 @@ export default function ProblemsPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [difficultyFilter, setDifficultyFilter] = useState<string>("ALL");
   const [categoryFilter, setCategoryFilter] = useState<string>("ALL");
+  
+  // Import state
+  const [isImporting, setIsImporting] = useState(false);
 
   // Get unique categories for filter dropdown
   const uniqueCategories = useMemo(() => {
@@ -65,6 +68,38 @@ export default function ProblemsPage() {
       setError("Failed to fetch problems");
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleImport = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setIsImporting(true);
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const response = await fetch('/api/problems/import', {
+        method: 'POST',
+        body: formData
+      });
+
+      const result = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(result.error || 'Import failed');
+      }
+
+      alert(`Import completed! ${result.results.successful} problems imported, ${result.results.failed} failed.`);
+      fetchProblems(); // Refresh the problems list
+    } catch (error) {
+      console.error('Import error:', error);
+      alert(`Import failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    } finally {
+      setIsImporting(false);
+      // Reset the file input
+      event.target.value = '';
     }
   };
 
@@ -133,6 +168,31 @@ export default function ProblemsPage() {
             </p>
           </div>
           <div className="flex flex-col sm:flex-row gap-3 mt-4 sm:mt-0">
+            <label className="btn-secondary group cursor-pointer">
+              <input
+                type="file"
+                accept=".csv"
+                onChange={handleImport}
+                disabled={isImporting}
+                className="hidden"
+              />
+              <span className="flex items-center gap-2">
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"
+                  />
+                </svg>
+                {isImporting ? "Importing..." : "Import CSV"}
+              </span>
+            </label>
             {problems.length > 0 && (
               <button
                 onClick={() => window.open('/api/problems/export', '_blank')}
