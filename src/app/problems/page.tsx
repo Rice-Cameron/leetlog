@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { Problem } from "@/types/problem";
 import { useUser, SignInButton } from "@clerk/nextjs";
@@ -11,6 +11,40 @@ export default function ProblemsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { isSignedIn, isLoaded } = useUser();
+  
+  // Search and filter state
+  const [searchTerm, setSearchTerm] = useState("");
+  const [difficultyFilter, setDifficultyFilter] = useState<string>("ALL");
+  const [categoryFilter, setCategoryFilter] = useState<string>("ALL");
+
+  // Get unique categories for filter dropdown
+  const uniqueCategories = useMemo(() => {
+    const categories = new Set<string>();
+    problems.forEach(problem => {
+      problem.categories?.forEach(category => categories.add(category));
+    });
+    return Array.from(categories).sort();
+  }, [problems]);
+
+  // Filter problems based on search criteria
+  const filteredProblems = useMemo(() => {
+    return problems.filter(problem => {
+      // Text search (title and keywords)
+      const matchesSearch = searchTerm === "" || 
+        problem.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        problem.triggerKeywords?.toLowerCase().includes(searchTerm.toLowerCase());
+
+      // Difficulty filter
+      const matchesDifficulty = difficultyFilter === "ALL" || 
+        problem.difficulty === difficultyFilter;
+
+      // Category filter
+      const matchesCategory = categoryFilter === "ALL" || 
+        problem.categories?.includes(categoryFilter);
+
+      return matchesSearch && matchesDifficulty && matchesCategory;
+    });
+  }, [problems, searchTerm, difficultyFilter, categoryFilter]);
 
   useEffect(() => {
     if (isLoaded && isSignedIn) {
@@ -121,6 +155,78 @@ export default function ProblemsPage() {
           </button>
         </div>
 
+        {/* Search and Filter Section */}
+        {problems.length > 0 && (
+          <div className="mb-8 animate-slide-up" style={{ animationDelay: "0.1s" }}>
+            <div className="glass-card rounded-2xl p-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {/* Search Input */}
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="Search problems or keywords..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                  />
+                </div>
+
+                {/* Difficulty Filter */}
+                <div>
+                  <select
+                    value={difficultyFilter}
+                    onChange={(e) => setDifficultyFilter(e.target.value)}
+                    className="block w-full px-3 py-3 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                  >
+                    <option value="ALL">All Difficulties</option>
+                    <option value="EASY">Easy</option>
+                    <option value="MEDIUM">Medium</option>
+                    <option value="HARD">Hard</option>
+                  </select>
+                </div>
+
+                {/* Category Filter */}
+                <div>
+                  <select
+                    value={categoryFilter}
+                    onChange={(e) => setCategoryFilter(e.target.value)}
+                    className="block w-full px-3 py-3 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                  >
+                    <option value="ALL">All Categories</option>
+                    {uniqueCategories.map(category => (
+                      <option key={category} value={category}>{category}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              
+              {/* Results count and clear filters */}
+              <div className="mt-4 flex justify-between items-center text-sm text-gray-600">
+                <span>
+                  Showing {filteredProblems.length} of {problems.length} problems
+                </span>
+                {(searchTerm || difficultyFilter !== "ALL" || categoryFilter !== "ALL") && (
+                  <button
+                    onClick={() => {
+                      setSearchTerm("");
+                      setDifficultyFilter("ALL");
+                      setCategoryFilter("ALL");
+                    }}
+                    className="text-indigo-600 hover:text-indigo-800 font-medium transition-colors"
+                  >
+                    Clear filters
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Problems grid/table */}
         {problems.length === 0 ? (
           <div className="animate-fade-in">
@@ -139,9 +245,30 @@ export default function ProblemsPage() {
               </button>
             </div>
           </div>
+        ) : filteredProblems.length === 0 ? (
+          <div className="animate-fade-in">
+            <div className="bg-white rounded-lg shadow p-8 text-center">
+              <h3 className="text-2xl font-semibold text-gradient mb-2">
+                No problems match your filters.
+              </h3>
+              <p className="text-gray-600 mb-6">
+                Try adjusting your search criteria or clear the filters.
+              </p>
+              <button
+                onClick={() => {
+                  setSearchTerm("");
+                  setDifficultyFilter("ALL");
+                  setCategoryFilter("ALL");
+                }}
+                className="btn-primary"
+              >
+                Clear Filters
+              </button>
+            </div>
+          </div>
         ) : (
           <div className="space-y-4 animate-fade-in">
-            {problems.map((problem, index) => (
+            {filteredProblems.map((problem, index) => (
               <div
                 key={problem.id}
                 className="glass-card rounded-2xl p-6 hover:shadow-xl transition-all duration-300 group cursor-pointer animate-scale-in"
