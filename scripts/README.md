@@ -6,10 +6,10 @@ Production-safe database management scripts with built-in environment detection 
 
 | Script | Purpose | Safety Level |
 |--------|---------|--------------|
-| `npm run seed` | Add sample data | ✅ Production protected |
-| `npm run safe-reset` | Clear all tables | 🚫 Production blocked |
-| `npm run test-db-mode` | Validate config | ✅ Safe to run anywhere |
-| `npm run quick-data` | Add minimal problems | ⚠️ Requires existing user |
+| `npm run seed` | Add sample data | Production protected |
+| `npm run safe-reset` | Clear all tables | Production blocked |
+| `npm run test-db-mode` | Validate config | Safe to run anywhere |
+| `npm run quick-data` | Add minimal problems | Requires existing user |
 
 ## Key Features
 

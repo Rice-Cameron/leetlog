@@ -4,12 +4,12 @@ async function main() {
   const environment = getDatabaseEnvironment()
   const prisma = createSafeDbClient()
   
-  console.log('🗑️  Safe Database Reset Script')
+  console.log('Safe Database Reset Script')
   console.log('================================')
   
   // Block production resets entirely
   if (environment === 'production') {
-    console.error('❌ BLOCKED: Production database resets are not allowed!')
+    console.error('ERROR: BLOCKED: Production database resets are not allowed!')
     console.error('   Use specific migration scripts for production changes.')
     process.exit(1)
   }
@@ -22,7 +22,7 @@ async function main() {
     )
     
     if (!confirmed) {
-      console.log('✋ Operation cancelled by user')
+      console.log('Operation cancelled by user')
       process.exit(0)
     }
   }
@@ -30,25 +30,25 @@ async function main() {
   try {
     await createBackup(prisma, 'database reset')
     
-    console.log('🗑️  Clearing database tables...')
+    console.log('Clearing database tables...')
     
     // Delete in proper order to respect foreign keys
     await prisma.problemCategory.deleteMany({})
-    console.log('   ✅ Cleared problem categories')
+    console.log('   Cleared problem categories')
     
     await prisma.problem.deleteMany({})
-    console.log('   ✅ Cleared problems')
+    console.log('   Cleared problems')
     
     await prisma.category.deleteMany({})
-    console.log('   ✅ Cleared categories')
+    console.log('   Cleared categories')
     
     await prisma.user.deleteMany({})
-    console.log('   ✅ Cleared users')
+    console.log('   Cleared users')
     
-    console.log('🎉 Database reset completed safely!')
+    console.log('Database reset completed safely!')
     
   } catch (error) {
-    console.error('❌ Reset failed:', error)
+    console.error('ERROR: Reset failed:', error)
     process.exit(1)
   } finally {
     await prisma.$disconnect()

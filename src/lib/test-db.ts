@@ -3,7 +3,7 @@ import { getDatabaseUrl, isTestMode } from './db-config'
 
 // Ensure we're in test mode
 if (!isTestMode()) {
-  throw new Error('🚨 test-db.ts can only be used in test mode! Set DATABASE_MODE=3 and NODE_ENV=test')
+  throw new Error('test-db.ts can only be used in test mode! Set DATABASE_MODE=3 and NODE_ENV=test')
 }
 
 // Test database instance - create fresh client for tests

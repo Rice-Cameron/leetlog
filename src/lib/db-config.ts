@@ -29,12 +29,12 @@ export function getDatabaseConfig(): DatabaseConfig {
 
   // Only log database mode in non-production environments
   if (nodeEnv !== "production") {
-    console.log(`🗄️  Database Mode: ${mode} (NODE_ENV: ${nodeEnv})`);
+    console.log(`Database Mode: ${mode} (NODE_ENV: ${nodeEnv})`);
   }
 
   // Force test mode if NODE_ENV=test (safety override)
   if (nodeEnv === "test") {
-    console.log(`🔒 NODE_ENV=test detected, forcing test database`);
+    console.log(`NODE_ENV=test detected, forcing test database`);
     return {
       mode: "test",
       url: process.env.DATABASE_URL_TEST || "",
@@ -70,7 +70,7 @@ export function getDatabaseConfig(): DatabaseConfig {
 
     default:
       console.warn(
-        `⚠️  Unknown DATABASE_MODE: ${mode}, defaulting to development`
+        `Unknown DATABASE_MODE: ${mode}, defaulting to development`
       );
       return {
         mode: "development",
@@ -96,26 +96,26 @@ export function getDatabaseUrl(): string {
     };
     const expectedEnvVar = envVarMap[config.mode];
     const errorMsg = `Database URL not configured for ${config.mode} mode (DATABASE_MODE=${process.env.DATABASE_MODE}). Set ${expectedEnvVar} in your environment.`;
-    console.error(`❌ ${errorMsg}`);
+    console.error(`ERROR: ${errorMsg}`);
     throw new Error(errorMsg);
   }
 
   // Security check: ensure we never accidentally use production URL in test mode
   if (config.mode === "test" && config.url.includes(NEON_BRANCHES.PRODUCTION)) {
     throw new Error(
-      "🚨 SAFETY VIOLATION: Test mode attempted to use production database!"
+      "SAFETY VIOLATION: Test mode attempted to use production database!"
     );
   }
 
   // Only log database details in non-production environments
   if (process.env.NODE_ENV !== "production") {
-    console.log(`📊 Active Database: ${config.mode.toUpperCase()}`);
+    console.log(`Active Database: ${config.mode.toUpperCase()}`);
     
     // Log the specific branch for verification
     if (config.mode === "test") {
-      console.log(`🧪 Test Branch: ${NEON_BRANCHES.TEST} (isolated)`);
+      console.log(`Test Branch: ${NEON_BRANCHES.TEST} (isolated)`);
     } else if (config.mode === "production") {
-      console.log(`🏭 Production Branch: ${NEON_BRANCHES.PRODUCTION}`);
+      console.log(`Production Branch: ${NEON_BRANCHES.PRODUCTION}`);
     }
   }
 
@@ -142,9 +142,9 @@ export function isTestMode(): boolean {
 export function validateDatabaseConfig(): void {
   const config = getDatabaseConfig();
 
-  console.log(`🔍 Database Configuration Validation:`);
+  console.log(`Database Configuration Validation:`);
   console.log(`   Mode: ${config.mode}`);
-  console.log(`   URL: ${config.url ? "✅ SET" : "❌ MISSING"}`);
+  console.log(`   URL: ${config.url ? "SET" : "MISSING"}`);
   console.log(`   Neon Project: ${config.neonProjectId || "N/A"}`);
   console.log(`   Neon Branch: ${config.neonBranch || "N/A"}`);
 
@@ -158,20 +158,20 @@ export function validateDatabaseConfig(): void {
   if (config.mode === "test") {
     if (config.url.includes(NEON_BRANCHES.PRODUCTION)) {
       throw new Error(
-        "🚨 CRITICAL SAFETY ERROR: Test mode is using production database URL!"
+        "CRITICAL SAFETY ERROR: Test mode is using production database URL!"
       );
     }
     console.log(
-      `✅ Safety Check: Test mode using isolated database (${NEON_BRANCHES.TEST})`
+      `Safety Check: Test mode using isolated database (${NEON_BRANCHES.TEST})`
     );
   }
 
   if (config.mode === "production") {
     if (!config.url.includes(NEON_BRANCHES.PRODUCTION)) {
       console.warn(
-        `⚠️  Warning: Production mode not using expected production branch`
+        `Warning: Production mode not using expected production branch`
       );
     }
-    console.log(`✅ Production mode confirmed (${NEON_BRANCHES.PRODUCTION})`);
+    console.log(`Production mode confirmed (${NEON_BRANCHES.PRODUCTION})`);
   }
 }

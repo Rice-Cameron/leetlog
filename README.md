@@ -35,6 +35,11 @@ cp .env.copy .env
 
 # Start development
 npm run dev
+
+# For local webhook testing (Clerk webhooks)
+# In a separate terminal, run webhook forwarding to port 3000
+npx ngrok http 3000
+# Make sure to update the webhook endpoint in your clerk console to the new forwarding domain if you are using the free ngrok version
 ```
 
 Open [http://localhost:3000](http://localhost:3000) to see the application.
@@ -50,10 +55,10 @@ DATABASE_MODE=3  # Testing (isolated)
 ```
 
 **Safety Features:**
-- ✅ Production operations require explicit confirmation
-- ✅ Tests automatically use isolated database branch
-- ✅ Multiple validation layers prevent cross-environment contamination
-- ✅ Runtime checks with detailed logging
+- Production operations require explicit confirmation
+- Tests automatically use isolated database branch
+- Multiple validation layers prevent cross-environment contamination
+- Runtime checks with detailed logging
 
 ## Key Commands
 
@@ -88,9 +93,9 @@ docs/                    # Detailed documentation
 
 ## Documentation
 
-- 🏗️ **[Technical Architecture](./src/README.md)** - Implementation details, patterns
-- 🗄️ **[Database System](./docs/DATABASE_MODES.md)** - Environment management guide  
-- 📊 **[Scripts & Tools](./scripts/README.md)** - Database utilities documentation
+- **[Technical Architecture](./src/README.md)** - Implementation details, patterns
+- **[Database System](./docs/DATABASE_MODES.md)** - Environment management guide  
+- **[Scripts & Tools](./scripts/README.md)** - Database utilities documentation
 
 ## Development Highlights
 

@@ -184,7 +184,7 @@ const sampleProblems = [
 
 async function main() {
   const environment = getDatabaseEnvironment();
-  console.log("🌱 Starting database seeding...");
+  console.log("Starting database seeding...");
 
   // Warn for production seeding
   if (environment === "production") {
@@ -194,7 +194,7 @@ async function main() {
     );
 
     if (!confirmed) {
-      console.log("✋ Seeding cancelled by user");
+      console.log("Seeding cancelled by user");
       process.exit(0);
     }
 
@@ -203,7 +203,7 @@ async function main() {
 
   try {
     // Create my clerk user
-    console.log("👤 Creating sample user...");
+    console.log("Creating sample user...");
     const user = await prisma.user.upsert({
       where: { id: "sample-user-id" },
       update: {},
@@ -214,10 +214,10 @@ async function main() {
         lastName: "Rice",
       },
     });
-    console.log(`✅ Created user: ${user.firstName} ${user.lastName}`);
+    console.log(`Created user: ${user.firstName} ${user.lastName}`);
 
     // Create categories
-    console.log("📂 Creating categories...");
+    console.log("Creating categories...");
     for (const categoryName of categories) {
       await prisma.category.upsert({
         where: { name: categoryName },
@@ -225,10 +225,10 @@ async function main() {
         create: { name: categoryName },
       });
     }
-    console.log(`✅ Created ${categories.length} categories`);
+    console.log(`Created ${categories.length} categories`);
 
     // Create problems with their category relationships
-    console.log("📝 Creating problems...");
+    console.log("Creating problems...");
     for (const problemData of sampleProblems) {
       const { categories: problemCategories, ...problemFields } = problemData;
 
@@ -254,18 +254,18 @@ async function main() {
       });
 
       console.log(
-        `✅ Created problem: ${problem.title} with ${problem.categories.length} categories`
+        `Created problem: ${problem.title} with ${problem.categories.length} categories`
       );
     }
 
-    console.log("🎉 Database seeding completed successfully!");
-    console.log(`📊 Summary:`);
+    console.log("Database seeding completed successfully!");
+    console.log(`Summary:`);
     console.log(`   - 1 user created`);
     console.log(`   - ${categories.length} categories created`);
     console.log(`   - ${sampleProblems.length} problems created`);
     console.log(`   - Problem-category relationships established`);
   } catch (error) {
-    console.error("❌ Error during seeding:", error);
+    console.error("ERROR: Error during seeding:", error);
     throw error;
   } finally {
     await prisma.$disconnect();

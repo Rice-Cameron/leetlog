@@ -6,12 +6,12 @@ async function main() {
   // Get user ID from environment variable or use fallback
   const userId = process.env.CLERK_USER_ID || 'test-user-id'
   
-  console.log('📝 Adding a few sample problems...')
+  console.log('Adding a few sample problems...')
   
   // Clear categories first since they should be created dynamically
   await prisma.problemCategory.deleteMany()
   await prisma.category.deleteMany()
-  console.log('🗑️ Cleared pre-seeded categories')
+  console.log('Cleared pre-seeded categories')
   
   // Add 3 simple problems
   const problems = [
@@ -76,15 +76,15 @@ async function main() {
       }
     })
     
-    console.log(`✅ Added: ${problem.title}`)
+    console.log(`Added: ${problem.title}`)
   }
   
-  console.log('🎉 Quick data setup complete!')
+  console.log('Quick data setup complete!')
 }
 
 main()
   .catch((e) => {
-    console.error('❌ Error:', e)
+    console.error('ERROR:', e)
     process.exit(1)
   })
   .finally(async () => {

@@ -22,7 +22,7 @@ export async function confirmDestructiveOperation(
   })
 
   const question = `
-⚠️  WARNING: You're about to perform a DESTRUCTIVE operation!
+WARNING: You're about to perform a DESTRUCTIVE operation!
    Operation: ${operation}
    Environment: ${environment.toUpperCase()}
    Database: ${process.env.DATABASE_URL?.substring(0, 50)}...
@@ -44,7 +44,7 @@ export function createSafeDbClient(): PrismaClient {
   
   // Only log environment details in non-production
   if (process.env.NODE_ENV !== "production") {
-    console.log(`🔍 Database Environment: ${environment.toUpperCase()}`)
+    console.log(`Database Environment: ${environment.toUpperCase()}`)
   }
   
   return new PrismaClient({
@@ -57,24 +57,24 @@ export async function createBackup(prisma: PrismaClient, operation: string) {
   const environment = getDatabaseEnvironment()
   
   if (environment === 'production') {
-    console.log(`📋 Creating backup before ${operation}...`)
+    console.log(`Creating backup before ${operation}...`)
     
     try {
       const userCount = await prisma.user.count()
       const problemCount = await prisma.problem.count()
       const categoryCount = await prisma.category.count()
       
-      console.log(`📊 Backup Summary:`)
+      console.log(`Backup Summary:`)
       console.log(`   Users: ${userCount}`)
       console.log(`   Problems: ${problemCount}`) 
       console.log(`   Categories: ${categoryCount}`)
       console.log(`   Timestamp: ${new Date().toISOString()}`)
       
       // In a real app, you'd export this data to files
-      console.log(`⚠️  Note: Consider running 'pg_dump' for full backup`)
+      console.log(`Note: Consider running 'pg_dump' for full backup`)
       
     } catch (error) {
-      console.error('❌ Backup failed:', error)
+      console.error('ERROR: Backup failed:', error)
       throw new Error('Cannot proceed without backup verification')
     }
   }
