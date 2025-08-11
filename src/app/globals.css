@@ -38,6 +38,27 @@ body {
   min-height: 100vh;
 }
 
+/* Fix for select and input text visibility */
+select, input {
+  color: #374151 !important; /* Ensure dark text in selects and inputs */
+}
+
+select option {
+  color: #374151 !important; /* Ensure dark text in option elements */
+  background-color: white !important; /* Ensure white background for options */
+}
+
+/* For webkit browsers (Safari, Chrome) */
+select option:checked {
+  color: #374151 !important;
+  background-color: #e5e7eb !important;
+}
+
+/* Ensure input placeholder is visible but lighter than main text */
+input::placeholder {
+  color: #9ca3af !important; /* Medium gray for placeholders */
+}
+
 .glass-card {
   backdrop-filter: blur(16px);
   background: rgba(255, 255, 255, 0.8);
