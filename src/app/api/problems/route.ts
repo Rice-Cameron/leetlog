@@ -41,8 +41,8 @@ export async function GET() {
     // Transform the data to match our Problem type
     const formattedProblems = problems.map((problem) => ({
       ...problem,
-      categories: problem.categories.map((cat) => cat.category.name),
       updatedAt: problem.updatedAt.toISOString(),
+      dateSolved: problem.dateSolved?.toISOString(),
     }));
 
     return NextResponse.json(formattedProblems);
