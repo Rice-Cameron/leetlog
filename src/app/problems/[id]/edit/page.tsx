@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import Header from "@/components/Header";
@@ -46,9 +46,9 @@ export default function EditProblemPage() {
     if (isLoaded && isSignedIn) {
       fetchProblem();
     }
-  }, [isLoaded, isSignedIn, params.id]);
+  }, [isLoaded, isSignedIn, params.id, fetchProblem]);
 
-  const fetchProblem = async () => {
+  const fetchProblem = useCallback(async () => {
     try {
       setIsLoading(true);
       const response = await fetch(`/api/problems/${params.id}`);
@@ -73,7 +73,7 @@ export default function EditProblemPage() {
         timeComplexity: data.timeComplexity,
         spaceComplexity: data.spaceComplexity,
         wasHard: data.wasHard,
-        categories: data.categories.map((cat: any) => cat.category.name).join(", ")
+        categories: data.categories.map((cat: { category: { name: string } }) => cat.category.name).join(", ")
       });
     } catch (error) {
       console.error("Error fetching problem:", error);
@@ -81,7 +81,7 @@ export default function EditProblemPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [params.id]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
