@@ -16,6 +16,7 @@ export default function ProblemsPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [difficultyFilter, setDifficultyFilter] = useState<string>("ALL");
   const [categoryFilter, setCategoryFilter] = useState<string>("ALL");
+  const [sortOrder, setSortOrder] = useState<string>("newest");
   
   // Import state
   const [isImporting, setIsImporting] = useState(false);
@@ -29,9 +30,9 @@ export default function ProblemsPage() {
     return Array.from(categories).sort();
   }, [problems]);
 
-  // Filter problems based on search criteria
+  // Filter and sort problems based on search criteria
   const filteredProblems = useMemo(() => {
-    return problems.filter(problem => {
+    const filtered = problems.filter(problem => {
       // Text search (title and keywords)
       const matchesSearch = searchTerm === "" || 
         problem.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -47,7 +48,24 @@ export default function ProblemsPage() {
 
       return matchesSearch && matchesDifficulty && matchesCategory;
     });
-  }, [problems, searchTerm, difficultyFilter, categoryFilter]);
+
+    // Sort the filtered results
+    return filtered.sort((a, b) => {
+      switch (sortOrder) {
+        case "newest":
+          return new Date(b.dateSolved || b.updatedAt).getTime() - new Date(a.dateSolved || a.updatedAt).getTime();
+        case "oldest":
+          return new Date(a.dateSolved || a.updatedAt).getTime() - new Date(b.dateSolved || b.updatedAt).getTime();
+        case "title":
+          return a.title.localeCompare(b.title);
+        case "difficulty":
+          const difficultyOrder = { "EASY": 1, "MEDIUM": 2, "HARD": 3 };
+          return difficultyOrder[a.difficulty] - difficultyOrder[b.difficulty];
+        default:
+          return 0;
+      }
+    });
+  }, [problems, searchTerm, difficultyFilter, categoryFilter, sortOrder]);
 
   useEffect(() => {
     if (isLoaded && isSignedIn) {
@@ -247,7 +265,7 @@ export default function ProblemsPage() {
         {problems.length > 0 && (
           <div className="mb-8 animate-slide-up" style={{ animationDelay: "0.1s" }}>
             <div className="glass-card rounded-2xl p-6">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 {/* Search Input */}
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -291,6 +309,20 @@ export default function ProblemsPage() {
                     ))}
                   </select>
                 </div>
+
+                {/* Sort Order */}
+                <div>
+                  <select
+                    value={sortOrder}
+                    onChange={(e) => setSortOrder(e.target.value)}
+                    className="block w-full px-3 py-3 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                  >
+                    <option value="newest">Newest First</option>
+                    <option value="oldest">Oldest First</option>
+                    <option value="title">Alphabetical</option>
+                    <option value="difficulty">By Difficulty</option>
+                  </select>
+                </div>
               </div>
               
               {/* Results count and clear filters */}
@@ -298,12 +330,13 @@ export default function ProblemsPage() {
                 <span>
                   Showing {filteredProblems.length} of {problems.length} problems
                 </span>
-                {(searchTerm || difficultyFilter !== "ALL" || categoryFilter !== "ALL") && (
+                {(searchTerm || difficultyFilter !== "ALL" || categoryFilter !== "ALL" || sortOrder !== "newest") && (
                   <button
                     onClick={() => {
                       setSearchTerm("");
                       setDifficultyFilter("ALL");
                       setCategoryFilter("ALL");
+                      setSortOrder("newest");
                     }}
                     className="text-indigo-600 hover:text-indigo-800 font-medium transition-colors"
                   >
@@ -347,6 +380,7 @@ export default function ProblemsPage() {
                   setSearchTerm("");
                   setDifficultyFilter("ALL");
                   setCategoryFilter("ALL");
+                  setSortOrder("newest");
                 }}
                 className="btn-primary"
               >
