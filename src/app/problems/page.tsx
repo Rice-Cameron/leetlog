@@ -25,7 +25,7 @@ export default function ProblemsPage() {
   const uniqueCategories = useMemo(() => {
     const categories = new Set<string>();
     problems.forEach(problem => {
-      problem.categories?.forEach(category => categories.add(category));
+      problem.categories?.forEach(problemCategory => categories.add(problemCategory.category.name));
     });
     return Array.from(categories).sort();
   }, [problems]);
@@ -44,7 +44,7 @@ export default function ProblemsPage() {
 
       // Category filter
       const matchesCategory = categoryFilter === "ALL" || 
-        problem.categories?.includes(categoryFilter);
+        problem.categories?.some(problemCategory => problemCategory.category.name === categoryFilter);
 
       return matchesSearch && matchesDifficulty && matchesCategory;
     });
@@ -498,7 +498,7 @@ export default function ProblemsPage() {
                             />
                           </svg>
                           <span>
-                            {problem.categories.slice(0, 2).join(", ")}
+                            {problem.categories.slice(0, 2).map(pc => pc.category.name).join(", ")}
                           </span>
                           {problem.categories.length > 2 && (
                             <span className="text-gray-400">
