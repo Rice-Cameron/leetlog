@@ -42,12 +42,6 @@ export default function EditProblemPage() {
     categories: ""
   });
 
-  useEffect(() => {
-    if (isLoaded && isSignedIn) {
-      fetchProblem();
-    }
-  }, [isLoaded, isSignedIn, params.id, fetchProblem]);
-
   const fetchProblem = useCallback(async () => {
     try {
       setIsLoading(true);
@@ -82,6 +76,12 @@ export default function EditProblemPage() {
       setIsLoading(false);
     }
   }, [params.id]);
+
+  useEffect(() => {
+    if (isLoaded && isSignedIn) {
+      fetchProblem();
+    }
+  }, [isLoaded, isSignedIn, fetchProblem]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
