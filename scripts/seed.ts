@@ -62,6 +62,7 @@ const sampleProblems = [
     spaceComplexity: "O(n)",
     wasHard: false,
     categories: ["Array", "Hash Table"],
+    dateSolved: new Date('2025-01-15T10:30:00Z'),
   },
   {
     title: "Add Two Numbers",
@@ -75,6 +76,7 @@ const sampleProblems = [
     spaceComplexity: "O(max(m,n))",
     wasHard: true,
     categories: ["Linked List", "Math"],
+    dateSolved: new Date('2025-01-28T14:15:00Z'),
   },
   {
     title: "Longest Substring Without Repeating Characters",
@@ -88,6 +90,7 @@ const sampleProblems = [
     spaceComplexity: "O(min(m,n))",
     wasHard: false,
     categories: ["Hash Table", "String", "Sliding Window"],
+    dateSolved: new Date('2025-02-28T14:15:00Z'),
   },
   {
     title: "Median of Two Sorted Arrays",
@@ -101,6 +104,7 @@ const sampleProblems = [
     spaceComplexity: "O(1)",
     wasHard: true,
     categories: ["Array", "Binary Search", "Divide and Conquer"],
+    dateSolved: new Date('2025-02-28T14:15:00Z'),
   },
   {
     title: "Longest Palindromic Substring",
@@ -114,6 +118,7 @@ const sampleProblems = [
     spaceComplexity: "O(1)",
     wasHard: false,
     categories: ["String", "Dynamic Programming"],
+    dateSolved: new Date('2025-02-28T14:15:00Z'),
   },
   {
     title: "ZigZag Conversion",
@@ -127,6 +132,7 @@ const sampleProblems = [
     spaceComplexity: "O(n)",
     wasHard: true,
     categories: ["String"],
+    dateSolved: new Date('2025-03-28T14:15:00Z'),
   },
   {
     title: "Reverse Integer",
@@ -140,6 +146,7 @@ const sampleProblems = [
     spaceComplexity: "O(1)",
     wasHard: false,
     categories: ["Math"],
+    dateSolved: new Date('2025-04-28T14:15:00Z'),
   },
   {
     title: "String to Integer (atoi)",
@@ -153,6 +160,7 @@ const sampleProblems = [
     spaceComplexity: "O(1)",
     wasHard: true,
     categories: ["String"],
+    dateSolved: new Date('2025-04-28T14:15:00Z'),
   },
   {
     title: "Palindrome Number",
@@ -166,6 +174,7 @@ const sampleProblems = [
     spaceComplexity: "O(1)",
     wasHard: false,
     categories: ["Math"],
+    dateSolved: new Date('2025-05-28T14:15:00Z'),
   },
   {
     title: "Regular Expression Matching",
@@ -179,6 +188,7 @@ const sampleProblems = [
     spaceComplexity: "O(mn)",
     wasHard: true,
     categories: ["String", "Dynamic Programming", "Recursion"],
+    dateSolved: new Date('2025-05-27T14:15:00Z'),
   },
 ];
 

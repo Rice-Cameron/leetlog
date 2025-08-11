@@ -188,62 +188,89 @@ export default function ProblemsPage() {
               Track your coding journey and analyze your progress
             </p>
           </div>
-          <div className="flex flex-col sm:flex-row gap-3 mt-4 sm:mt-0">
-            <label className="btn-secondary group cursor-pointer">
-              <input
-                type="file"
-                accept=".csv"
-                onChange={handleImport}
-                disabled={isImporting}
-                className="hidden"
-              />
-              <span className="flex items-center gap-2">
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"
-                  />
-                </svg>
-                {isImporting ? "Importing..." : "Import CSV"}
-              </span>
-            </label>
+          <div className="flex flex-wrap gap-2 mt-4 sm:mt-0">
             {problems.length > 0 && (
-              <button
-                onClick={() => window.open('/api/problems/export', '_blank')}
-                className="btn-secondary group"
-              >
-                <span className="flex items-center gap-2">
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                    />
-                  </svg>
-                  Export CSV
-                </span>
-              </button>
+              <>
+                <button
+                  onClick={() => router.push("/stats")}
+                  className="btn-secondary group whitespace-nowrap"
+                >
+                  <span className="flex items-center gap-2">
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                      />
+                    </svg>
+                    Stats
+                  </span>
+                </button>
+                
+                <label className="btn-secondary group cursor-pointer whitespace-nowrap" title="Import problems from a CSV file">
+                  <input
+                    type="file"
+                    accept=".csv"
+                    onChange={handleImport}
+                    disabled={isImporting}
+                    className="hidden"
+                  />
+                  <span className="flex items-center gap-2">
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"
+                      />
+                    </svg>
+                    {isImporting ? "Importing..." : "Import"}
+                  </span>
+                </label>
+                
+                <button
+                  onClick={() => window.open('/api/problems/export', '_blank')}
+                  className="btn-secondary group whitespace-nowrap"
+                  title="Export all problems to a CSV file"
+                >
+                  <span className="flex items-center gap-2">
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                      />
+                    </svg>
+                    Export
+                  </span>
+                </button>
+              </>
             )}
+            
             <button
               onClick={() => router.push("/new")}
-              className="btn-primary group"
+              className="btn-primary group whitespace-nowrap"
             >
               <span className="flex items-center gap-2">
                 <svg
-                  className="w-5 h-5"
+                  className="w-4 h-4"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -255,7 +282,7 @@ export default function ProblemsPage() {
                     d="M12 6v6m0 0v6m0-6h6m-6 0H6"
                   />
                 </svg>
-                Add New Problem
+                Add Problem
               </span>
             </button>
           </div>

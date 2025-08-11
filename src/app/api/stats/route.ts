@@ -29,25 +29,39 @@ export async function GET() {
       _count: true
     });
 
-    // Get language usage
-    const languageStats = await prisma.problem.groupBy({
-      by: ['languageUsed'],
+    // Get language usage - use aggregation instead
+    const allProblems = await prisma.problem.findMany({
       where: { userId },
-      _count: true,
-      orderBy: { _count: 'desc' },
-      take: 5 // Top 5 languages
+      select: { languageUsed: true }
     });
+    
+    const languageCount = allProblems.reduce((acc, problem) => {
+      acc[problem.languageUsed] = (acc[problem.languageUsed] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
+    
+    const languageStats = Object.entries(languageCount)
+      .map(([language, count]) => ({ languageUsed: language, _count: count }))
+      .sort((a, b) => b._count - a._count)
+      .slice(0, 5);
 
     // Get category breakdown
-    const categoryStats = await prisma.problemCategory.groupBy({
-      by: ['categoryId'],
+    const allCategories = await prisma.problemCategory.findMany({
       where: {
         problem: { userId }
       },
-      _count: true,
-      orderBy: { _count: 'desc' },
-      take: 8 // Top 8 categories
+      select: { categoryId: true }
     });
+    
+    const categoryCount = allCategories.reduce((acc, problemCategory) => {
+      acc[problemCategory.categoryId] = (acc[problemCategory.categoryId] || 0) + 1;
+      return acc;
+    }, {} as Record<number, number>);
+    
+    const categoryStats = Object.entries(categoryCount)
+      .map(([categoryId, count]) => ({ categoryId: parseInt(categoryId), _count: count }))
+      .sort((a, b) => b._count - a._count)
+      .slice(0, 8);
 
     // Get category names for the top categories
     const categoryIds = categoryStats.map(stat => stat.categoryId);
