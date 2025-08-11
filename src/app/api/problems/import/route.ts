@@ -53,78 +53,88 @@ export async function POST(request: NextRequest) {
       }, { status: 400 });
     }
 
-    const importResults = {
-      successful: 0,
-      failed: 0,
-      errors: [] as string[]
-    };
+    // First pass: validate all rows before importing anything
+    const validationErrors: string[] = [];
+    const validatedData = [];
 
     for (let i = 1; i < lines.length; i++) {
       const line = lines[i];
-      try {
-        const values = parseCSVLine(line);
+      const values = parseCSVLine(line);
 
-        if (values.length !== expectedHeaders.length) {
-          importResults.errors.push(`Row ${i + 1}: Wrong number of columns`);
-          importResults.failed++;
-          continue;
-        }
-
-        const [title, url, difficulty, languageUsed, dateSolved, 
-               solutionNotes, whatWentWrong, triggerKeywords,
-               timeComplexity, spaceComplexity, wasHard, categories] = values;
-
-        if (!title || !url || !difficulty || !languageUsed) {
-          importResults.errors.push(`Row ${i + 1}: Missing required fields`);
-          importResults.failed++;
-          continue;
-        }
-
-        if (!['EASY', 'MEDIUM', 'HARD'].includes(difficulty.toUpperCase())) {
-          importResults.errors.push(`Row ${i + 1}: Invalid difficulty "${difficulty}"`);
-          importResults.failed++;
-          continue;
-        }
-
-        const categoryNames = categories ? categories.split(';').map(c => c.trim()).filter(c => c) : [];
-
-        await prisma.problem.create({
-          data: {
-            title,
-            url,
-            difficulty: difficulty.toUpperCase() as 'EASY' | 'MEDIUM' | 'HARD',
-            languageUsed,
-            dateSolved: dateSolved ? new Date(dateSolved) : new Date(),
-            solutionNotes: solutionNotes || '',
-            whatWentWrong: whatWentWrong || '',
-            triggerKeywords: triggerKeywords || '',
-            timeComplexity: timeComplexity || '',
-            spaceComplexity: spaceComplexity || '',
-            wasHard: wasHard.toLowerCase() === 'true',
-            userId,
-            categories: {
-              create: categoryNames.map(categoryName => ({
-                category: {
-                  connectOrCreate: {
-                    where: { name: categoryName },
-                    create: { name: categoryName }
-                  }
-                }
-              }))
-            }
-          }
-        });
-
-        importResults.successful++;
-      } catch (error) {
-        importResults.errors.push(`Row ${i + 1}: ${error instanceof Error ? error.message : 'Unknown error'}`);
-        importResults.failed++;
+      if (values.length !== expectedHeaders.length) {
+        validationErrors.push(`Row ${i + 1}: Wrong number of columns (expected ${expectedHeaders.length}, got ${values.length})`);
+        continue;
       }
+
+      const [title, url, difficulty, languageUsed, dateSolved, 
+             solutionNotes, whatWentWrong, triggerKeywords,
+             timeComplexity, spaceComplexity, wasHard, categories] = values;
+
+      if (!title || !url || !difficulty || !languageUsed) {
+        validationErrors.push(`Row ${i + 1}: Missing required fields (title, url, difficulty, languageUsed)`);
+        continue;
+      }
+
+      if (!['EASY', 'MEDIUM', 'HARD'].includes(difficulty.toUpperCase())) {
+        validationErrors.push(`Row ${i + 1}: Invalid difficulty "${difficulty}" (must be EASY, MEDIUM, or HARD)`);
+        continue;
+      }
+
+      // If we get here, the row is valid
+      const categoryNames = categories ? categories.split(';').map(c => c.trim()).filter(c => c) : [];
+      
+      validatedData.push({
+        title,
+        url,
+        difficulty: difficulty.toUpperCase() as 'EASY' | 'MEDIUM' | 'HARD',
+        languageUsed,
+        dateSolved: dateSolved ? new Date(dateSolved) : new Date(),
+        solutionNotes: solutionNotes || '',
+        whatWentWrong: whatWentWrong || '',
+        triggerKeywords: triggerKeywords || '',
+        timeComplexity: timeComplexity || '',
+        spaceComplexity: spaceComplexity || '',
+        wasHard: wasHard.toLowerCase() === 'true',
+        categoryNames,
+        userId
+      });
+    }
+
+    // If there are any validation errors, fail the entire import
+    if (validationErrors.length > 0) {
+      return NextResponse.json({
+        error: "Validation failed - no problems were imported",
+        validationErrors
+      }, { status: 400 });
+    }
+
+    // Second pass: import all validated data
+    let importedCount = 0;
+    for (const problemData of validatedData) {
+      const { categoryNames, ...problemFields } = problemData;
+      
+      await prisma.problem.create({
+        data: {
+          ...problemFields,
+          categories: {
+            create: categoryNames.map(categoryName => ({
+              category: {
+                connectOrCreate: {
+                  where: { name: categoryName },
+                  create: { name: categoryName }
+                }
+              }
+            }))
+          }
+        }
+      });
+      
+      importedCount++;
     }
 
     return NextResponse.json({
-      message: "Import completed",
-      results: importResults
+      message: `Successfully imported ${importedCount} problems`,
+      count: importedCount
     });
 
   } catch (error) {

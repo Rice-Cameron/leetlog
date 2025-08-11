@@ -88,10 +88,13 @@ export default function ProblemsPage() {
       const result = await response.json();
       
       if (!response.ok) {
-        throw new Error(result.error || 'Import failed');
+        const errorMessage = result.validationErrors 
+          ? `${result.error}\n\nErrors found:\n${result.validationErrors.join('\n')}`
+          : result.error || 'Import failed';
+        throw new Error(errorMessage);
       }
 
-      alert(`Import completed! ${result.results.successful} problems imported, ${result.results.failed} failed.`);
+      alert(`Import successful! ${result.count} problems imported.`);
       fetchProblems(); // Refresh the problems list
     } catch (error) {
       console.error('Import error:', error);
