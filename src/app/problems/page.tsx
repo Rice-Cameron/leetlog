@@ -132,27 +132,52 @@ export default function ProblemsPage() {
               Track your coding journey and analyze your progress
             </p>
           </div>
-          <button
-            onClick={() => router.push("/new")}
-            className="btn-primary mt-4 sm:mt-0 group"
-          >
-            <span className="flex items-center gap-2">
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+          <div className="flex flex-col sm:flex-row gap-3 mt-4 sm:mt-0">
+            {problems.length > 0 && (
+              <button
+                onClick={() => window.open('/api/problems/export', '_blank')}
+                className="btn-secondary group"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                />
-              </svg>
-              Add New Problem
-            </span>
-          </button>
+                <span className="flex items-center gap-2">
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                    />
+                  </svg>
+                  Export CSV
+                </span>
+              </button>
+            )}
+            <button
+              onClick={() => router.push("/new")}
+              className="btn-primary group"
+            >
+              <span className="flex items-center gap-2">
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                  />
+                </svg>
+                Add New Problem
+              </span>
+            </button>
+          </div>
         </div>
 
         {/* Search and Filter Section */}
