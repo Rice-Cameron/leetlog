@@ -2,6 +2,7 @@ import { format } from "date-fns";
 import { notFound } from "next/navigation";
 import { getProblemById } from "../../../lib/problems";
 import EditButton from "./EditButton";
+import BackButton from "./BackButton";
 
 // Map complexity values to labels for display
 const complexityLabelMap: Record<string, string> = {
@@ -40,6 +41,7 @@ export default async function ProblemDetailsPage({
         ></div>
       </div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
+        <BackButton />
         <div className="glass-card rounded-3xl shadow-2xl p-8 animate-scale-in">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-4">
