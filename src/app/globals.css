@@ -59,6 +59,16 @@ input::placeholder {
   color: #9ca3af !important; /* Medium gray for placeholders */
 }
 
+/* Fix prose and general text color issues */
+.prose, .prose p, .prose div {
+  color: #374151 !important; /* Ensure dark text in prose content */
+}
+
+/* Ensure all text areas and general text elements are dark */
+textarea {
+  color: #374151 !important;
+}
+
 .glass-card {
   backdrop-filter: blur(16px);
   background: rgba(255, 255, 255, 0.8);

@@ -1,6 +1,8 @@
 import { format } from "date-fns";
 import { notFound } from "next/navigation";
 import { getProblemById } from "../../../lib/problems";
+import EditButton from "./EditButton";
+import BackButton from "./BackButton";
 
 // Map complexity values to labels for display
 const complexityLabelMap: Record<string, string> = {
@@ -39,23 +41,27 @@ export default async function ProblemDetailsPage({
         ></div>
       </div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
+        <BackButton />
         <div className="glass-card rounded-3xl shadow-2xl p-8 animate-scale-in">
           <div className="flex items-center justify-between mb-6">
-            <h1 className="text-4xl font-bold text-gradient">
-              {problem.title}
-            </h1>
-            <span
-              key={problem.id}
-              className={`px-3 py-1 rounded-full text-sm font-medium ${
-                problem.difficulty === "EASY"
-                  ? "bg-green-100 text-green-700 border border-green-200"
-                  : problem.difficulty === "MEDIUM"
-                  ? "bg-yellow-100 text-yellow-700 border border-yellow-200"
-                  : "bg-red-100 text-red-700 border border-red-200"
-              }`}
-            >
-              {problem.difficulty}
-            </span>
+            <div className="flex items-center gap-4">
+              <h1 className="text-4xl font-bold text-gradient">
+                {problem.title}
+              </h1>
+              <span
+                key={problem.id}
+                className={`px-3 py-1 rounded-full text-sm font-medium ${
+                  problem.difficulty === "EASY"
+                    ? "bg-green-100 text-green-700 border border-green-200"
+                    : problem.difficulty === "MEDIUM"
+                    ? "bg-yellow-100 text-yellow-700 border border-yellow-200"
+                    : "bg-red-100 text-red-700 border border-red-200"
+                }`}
+              >
+                {problem.difficulty}
+              </span>
+            </div>
+            <EditButton problemId={problem.id} />
           </div>
           <div className="space-y-10">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
